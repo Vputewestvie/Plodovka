@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Плодовый питомник — каталог саженцев</title>
-
+    <title>Плодовый питомник</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
-
     <style>
         [x-cloak] { display: none !important; }
         body { background: #FAF9F5; font-family: 'Inter', sans-serif; color: #1C352D; }
@@ -320,341 +317,323 @@
 </div>
 
 <script>
-(function() {
-    'use strict';
+    (function() {
+        'use strict';
 
-    document.addEventListener('alpine:init', function() {
-        Alpine.data('catalogApp', function() {
-            return {
-                // STATE
-                plants: [],
-                groups: ['all'],
-                activeGroup: 'all',
-                searchQuery: '',
-                onlyInStock: false,
-                sortBy: 'group',
-                loading: true,
-                error: false,
-                errorMessage: '',
-                selectionList: [],
-                comparisonList: [],
-                modalOpen: false,
-                currentPlant: { media: [], title: '', group: '', details: {} },
-                activePhotoIndex: 0,
-                comparisonOpen: false,
-                isFullScreen: false,
-                toastMessage: '',
-                toastTimer: null,
+        console.log('Alpine is loading...');
 
-                // ===== INIT =====
-                async init() {
-                    this.restoreStorage();
-                    await this.loadData();
-                },
+        document.addEventListener('alpine:init', function() {
+            console.log('alpine:init event fired');
 
-                // ===== LOAD DATA =====
-                async loadData() {
-                    try {
-                        const SHEET_ID = '1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk';
-                        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-                        const resp = await fetch(url);
+            Alpine.data('catalogApp', function() {
+                console.log('catalogApp component registered');
+                return {
+                    // STATE
+                    plants: [],
+                    groups: ['all'],
+                    activeGroup: 'all',
+                    searchQuery: '',
+                    onlyInStock: false,
+                    sortBy: 'group',
+                    loading: true,
+                    error: false,
+                    errorMessage: '',
+                    selectionList: [],
+                    comparisonList: [],
+                    modalOpen: false,
+                    currentPlant: { media: [], title: '', group: '', details: {} },
+                    activePhotoIndex: 0,
+                    comparisonOpen: false,
+                    isFullScreen: false,
+                    toastMessage: '',
+                    toastTimer: null,
 
-                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                    // INIT
+                    async init() {
+                        console.log('catalogApp init() called');
+                        this.restoreStorage();
+                        await this.loadData();
+                    },
 
-                        const csv = await resp.text();
-                        const parsed = this.parseCSV(csv);
+                    // LOAD DATA
+                    async loadData() {
+                        try {
+                            const SHEET_ID = '1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk';
+                            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+                            const resp = await fetch(url);
+                            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                            const csv = await resp.text();
+                            const parsed = this.parseCSV(csv);
+                            if (!parsed || parsed.length < 2) throw new Error('Нет данных');
 
-                        if (!parsed || parsed.length < 2) throw new Error('Нет данных');
+                            const headers = parsed[0].map(h => h.trim().toLowerCase());
+                            const rows = parsed.slice(1);
 
-                        const headers = parsed[0].map(h => h.trim().toLowerCase());
-                        const rows = parsed.slice(1);
+                            const titleIdx = this.findHeader(headers, ['название', 'сорт', 'наименование']);
+                            const priceIdx = this.findHeader(headers, ['цена', 'стоимость']);
+                            const stockIdx = this.findHeader(headers, ['наличие', 'количество', 'остаток']);
+                            const groupIdx = this.findHeader(headers, ['группа', 'тип', 'вид', 'категория']);
+                            const photoIdx = this.findHeader(headers, ['фото', 'ссылка', 'image', 'картинка']);
 
-                        const titleIdx = this.findHeader(headers, ['название', 'сорт', 'наименование']);
-                        const priceIdx = this.findHeader(headers, ['цена', 'стоимость']);
-                        const stockIdx = this.findHeader(headers, ['наличие', 'количество', 'остаток']);
-                        const groupIdx = this.findHeader(headers, ['группа', 'тип', 'вид', 'категория']);
-                        const photoIdx = this.findHeader(headers, ['фото', 'ссылка', 'image', 'картинка']);
-
-                        this.plants = rows.map((row, i) => {
-                            const get = (idx) => (idx >= 0 && idx < row.length) ? row[idx].trim() : '';
-
-                            const title = get(titleIdx) || `Саженец ${i + 1}`;
-
-                            let media = [];
-                            if (photoIdx >= 0 && get(photoIdx)) {
-                                const raw = get(photoIdx);
-                                const urls = raw.split(/[|,;\n]+/).map(u => u.trim()).filter(u => u.startsWith('http'));
-                                media = urls;
-                            }
-
-                            const details = {};
-                            const skipKeys = ['название', 'сорт', 'наименование', 'цена', 'стоимость',
-                                'наличие', 'количество', 'остаток', 'группа', 'тип', 'вид', 'категория',
-                                'фото', 'ссылка', 'image', 'картинка'
-                            ];
-                            headers.forEach((h, idx) => {
-                                const val = get(idx);
-                                if (val && !skipKeys.some(k => h.includes(k))) {
-                                    details[h] = val;
+                            this.plants = rows.map((row, i) => {
+                                const get = (idx) => (idx >= 0 && idx < row.length) ? row[idx].trim() : '';
+                                const title = get(titleIdx) || `Саженец ${i + 1}`;
+                                let media = [];
+                                if (photoIdx >= 0 && get(photoIdx)) {
+                                    const raw = get(photoIdx);
+                                    const urls = raw.split(/[|,;\n]+/).map(u => u.trim()).filter(u => u.startsWith('http'));
+                                    media = urls;
                                 }
-                            });
-
-                            return {
-                                id: i,
-                                title: title,
-                                price: Number(get(priceIdx)) || 0,
-                                stock: Number(get(stockIdx)) || 0,
-                                group: get(groupIdx) ? get(groupIdx).toLowerCase() : 'другое',
-                                media: media,
-                                details: details
-                            };
-                        }).filter(p => p.title && p.title.length > 0);
-
-                        this.groups = ['all', ...new Set(this.plants.map(p => p.group))];
-                        this.loading = false;
-
-                    } catch (err) {
-                        console.error('Load error:', err);
-                        this.error = true;
-                        this.errorMessage = err.message || 'Ошибка загрузки данных';
-                        this.loading = false;
-                    }
-
-                    // sync saved selections
-                    this.selectionList = this.selectionList.filter(s => this.plants.some(p => p.id === s.id));
-                    this.comparisonList = this.comparisonList.filter(s => this.plants.some(p => p.id === s.id));
-                    this.saveStorage();
-                },
-
-                // ===== CSV PARSER =====
-                parseCSV(text) {
-                    const lines = [];
-                    let current = [];
-                    let field = '';
-                    let inside = false;
-
-                    for (let i = 0; i < text.length; i++) {
-                        const ch = text[i];
-
-                        if (inside) {
-                            if (ch === '"' && text[i + 1] === '"') {
-                                field += '"';
-                                i++;
-                            } else if (ch === '"') {
-                                inside = false;
-                            } else {
-                                field += ch;
-                            }
-                        } else {
-                            if (ch === '"') {
-                                inside = true;
-                            } else if (ch === ',') {
-                                current.push(field.trim());
-                                field = '';
-                            } else if (ch === '\n' || ch === '\r') {
-                                if (field || current.length) {
-                                    current.push(field.trim());
-                                    if (current.some(c => c.length > 0)) {
-                                        lines.push(current);
+                                const details = {};
+                                const skipKeys = ['название', 'сорт', 'наименование', 'цена', 'стоимость',
+                                    'наличие', 'количество', 'остаток', 'группа', 'тип', 'вид', 'категория',
+                                    'фото', 'ссылка', 'image', 'картинка'
+                                ];
+                                headers.forEach((h, idx) => {
+                                    const val = get(idx);
+                                    if (val && !skipKeys.some(k => h.includes(k))) {
+                                        details[h] = val;
                                     }
-                                    current = [];
-                                    field = '';
-                                }
-                                if (ch === '\r' && text[i + 1] === '\n') i++;
+                                });
+                                return {
+                                    id: i,
+                                    title: title,
+                                    price: Number(get(priceIdx)) || 0,
+                                    stock: Number(get(stockIdx)) || 0,
+                                    group: get(groupIdx) ? get(groupIdx).toLowerCase() : 'другое',
+                                    media: media,
+                                    details: details
+                                };
+                            }).filter(p => p.title && p.title.length > 0);
+
+                            this.groups = ['all', ...new Set(this.plants.map(p => p.group))];
+                            this.loading = false;
+                            console.log('✅ Loaded', this.plants.length, 'plants');
+                        } catch (err) {
+                            console.error('Load error:', err);
+                            this.error = true;
+                            this.errorMessage = err.message || 'Ошибка загрузки данных';
+                            this.loading = false;
+                        }
+
+                        this.selectionList = this.selectionList.filter(s => this.plants.some(p => p.id === s.id));
+                        this.comparisonList = this.comparisonList.filter(s => this.plants.some(p => p.id === s.id));
+                        this.saveStorage();
+                    },
+
+                    // CSV PARSER
+                    parseCSV(text) {
+                        const lines = [];
+                        let current = [];
+                        let field = '';
+                        let inside = false;
+                        for (let i = 0; i < text.length; i++) {
+                            const ch = text[i];
+                            if (inside) {
+                                if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+                                else if (ch === '"') { inside = false; }
+                                else { field += ch; }
                             } else {
-                                field += ch;
+                                if (ch === '"') { inside = true; }
+                                else if (ch === ',') { current.push(field.trim()); field = ''; }
+                                else if (ch === '\n' || ch === '\r') {
+                                    if (field || current.length) {
+                                        current.push(field.trim());
+                                        if (current.some(c => c.length > 0)) lines.push(current);
+                                        current = [];
+                                        field = '';
+                                    }
+                                    if (ch === '\r' && text[i + 1] === '\n') i++;
+                                } else {
+                                    field += ch;
+                                }
                             }
                         }
-                    }
-
-                    if (field || current.length) {
-                        current.push(field.trim());
-                        if (current.some(c => c.length > 0)) {
-                            lines.push(current);
+                        if (field || current.length) {
+                            current.push(field.trim());
+                            if (current.some(c => c.length > 0)) lines.push(current);
                         }
-                    }
+                        return lines.length ? lines : [];
+                    },
 
-                    return lines.length ? lines : [];
-                },
-
-                findHeader(headers, candidates) {
-                    for (let c of candidates) {
-                        const idx = headers.findIndex(h => h.includes(c));
-                        if (idx >= 0) return idx;
-                    }
-                    return -1;
-                },
-
-                // ===== STORAGE =====
-                restoreStorage() {
-                    try {
-                        const sel = JSON.parse(localStorage.getItem('fruit_selection') || '[]');
-                        const comp = JSON.parse(localStorage.getItem('fruit_comparison') || '[]');
-                        if (Array.isArray(sel)) this.selectionList = sel;
-                        if (Array.isArray(comp)) this.comparisonList = comp;
-                    } catch (_) {}
-                },
-
-                saveStorage() {
-                    try {
-                        localStorage.setItem('fruit_selection', JSON.stringify(this.selectionList));
-                        localStorage.setItem('fruit_comparison', JSON.stringify(this.comparisonList));
-                    } catch (_) {}
-                },
-
-                // ===== FILTERS =====
-                get filteredPlants() {
-                    return this.plants.filter(p => {
-                        const matchGroup = this.activeGroup === 'all' || p.group === this.activeGroup;
-                        const matchStock = !this.onlyInStock || p.stock > 0;
-                        const matchSearch = p.title.toLowerCase().includes(this.searchQuery.toLowerCase());
-                        return matchGroup && matchStock && matchSearch;
-                    });
-                },
-
-                get sortedPlants() {
-                    const list = [...this.filteredPlants];
-                    switch (this.sortBy) {
-                        case 'group':
-                            return list.sort((a, b) => a.group.localeCompare(b.group) || a.title.localeCompare(b.title));
-                        case 'price-asc':
-                            return list.sort((a, b) => a.price - b.price);
-                        case 'price-desc':
-                            return list.sort((a, b) => b.price - a.price);
-                        case 'name-asc':
-                            return list.sort((a, b) => a.title.localeCompare(b.title));
-                        case 'stock':
-                            return list.sort((a, b) => (b.stock > 0) - (a.stock > 0));
-                        default:
-                            return list;
-                    }
-                },
-
-                // ===== SELECTION =====
-                toggleSelection(plant) {
-                    const idx = this.selectionList.findIndex(p => p.id === plant.id);
-                    if (idx >= 0) {
-                        this.selectionList.splice(idx, 1);
-                        this.showToast(`«${plant.title}» убран`);
-                    } else {
-                        this.selectionList.push(plant);
-                        this.showToast(`«${plant.title}» добавлен`);
-                    }
-                    this.saveStorage();
-                },
-
-                isSelected(plant) {
-                    return this.selectionList.some(p => p.id === plant.id);
-                },
-
-                calculateTotal() {
-                    return this.selectionList.reduce((sum, p) => sum + p.price, 0);
-                },
-
-                clearSelection() {
-                    this.selectionList = [];
-                    this.saveStorage();
-                    this.showToast('Корзина очищена');
-                },
-
-                copyForAvito() {
-                    let text = 'Здравствуйте! Хочу приобрести:\n\n';
-                    this.selectionList.forEach(p => {
-                        text += `• ${p.title} (${p.price} ₽)\n`;
-                    });
-                    text += `\nИтого: ${this.calculateTotal()} ₽.`;
-                    navigator.clipboard.writeText(text).then(() => {
-                        this.showToast('Список скопирован в буфер!');
-                    }).catch(() => {
-                        // fallback для старых браузеров
-                        const textarea = document.createElement('textarea');
-                        textarea.value = text;
-                        document.body.appendChild(textarea);
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
-                        this.showToast('Список скопирован в буфер!');
-                    });
-                },
-
-                // ===== COMPARISON =====
-                toggleComparison(plant) {
-                    const idx = this.comparisonList.findIndex(p => p.id === plant.id);
-                    if (idx >= 0) {
-                        this.comparisonList.splice(idx, 1);
-                        this.showToast(`«${plant.title}» убран из сравнения`);
-                    } else {
-                        if (this.comparisonList.length >= 3) {
-                            this.showToast('Можно сравнить не более 3 саженцев');
-                            return;
+                    findHeader(headers, candidates) {
+                        for (let c of candidates) {
+                            const idx = headers.findIndex(h => h.includes(c));
+                            if (idx >= 0) return idx;
                         }
-                        this.comparisonList.push(plant);
-                        this.showToast(`«${plant.title}» добавлен к сравнению`);
+                        return -1;
+                    },
+
+                    // STORAGE
+                    restoreStorage() {
+                        try {
+                            const sel = JSON.parse(localStorage.getItem('fruit_selection') || '[]');
+                            const comp = JSON.parse(localStorage.getItem('fruit_comparison') || '[]');
+                            if (Array.isArray(sel)) this.selectionList = sel;
+                            if (Array.isArray(comp)) this.comparisonList = comp;
+                        } catch (_) {}
+                    },
+
+                    saveStorage() {
+                        try {
+                            localStorage.setItem('fruit_selection', JSON.stringify(this.selectionList));
+                            localStorage.setItem('fruit_comparison', JSON.stringify(this.comparisonList));
+                        } catch (_) {}
+                    },
+
+                    // FILTERS
+                    get filteredPlants() {
+                        return this.plants.filter(p => {
+                            const matchGroup = this.activeGroup === 'all' || p.group === this.activeGroup;
+                            const matchStock = !this.onlyInStock || p.stock > 0;
+                            const matchSearch = p.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+                            return matchGroup && matchStock && matchSearch;
+                        });
+                    },
+
+                    get sortedPlants() {
+                        const list = [...this.filteredPlants];
+                        switch (this.sortBy) {
+                            case 'group':
+                                return list.sort((a, b) => a.group.localeCompare(b.group) || a.title.localeCompare(b.title));
+                            case 'price-asc':
+                                return list.sort((a, b) => a.price - b.price);
+                            case 'price-desc':
+                                return list.sort((a, b) => b.price - a.price);
+                            case 'name-asc':
+                                return list.sort((a, b) => a.title.localeCompare(b.title));
+                            case 'stock':
+                                return list.sort((a, b) => (b.stock > 0) - (a.stock > 0));
+                            default:
+                                return list;
+                        }
+                    },
+
+                    // SELECTION
+                    toggleSelection(plant) {
+                        const idx = this.selectionList.findIndex(p => p.id === plant.id);
+                        if (idx >= 0) {
+                            this.selectionList.splice(idx, 1);
+                            this.showToast(`«${plant.title}» убран`);
+                        } else {
+                            this.selectionList.push(plant);
+                            this.showToast(`«${plant.title}» добавлен`);
+                        }
+                        this.saveStorage();
+                    },
+
+                    isSelected(plant) {
+                        return this.selectionList.some(p => p.id === plant.id);
+                    },
+
+                    calculateTotal() {
+                        return this.selectionList.reduce((sum, p) => sum + p.price, 0);
+                    },
+
+                    clearSelection() {
+                        this.selectionList = [];
+                        this.saveStorage();
+                        this.showToast('Корзина очищена');
+                    },
+
+                    copyForAvito() {
+                        let text = 'Здравствуйте! Хочу приобрести:\n\n';
+                        this.selectionList.forEach(p => {
+                            text += `• ${p.title} (${p.price} ₽)\n`;
+                        });
+                        text += `\nИтого: ${this.calculateTotal()} ₽.`;
+                        navigator.clipboard.writeText(text).then(() => {
+                            this.showToast('Список скопирован в буфер!');
+                        }).catch(() => {
+                            const textarea = document.createElement('textarea');
+                            textarea.value = text;
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textarea);
+                            this.showToast('Список скопирован в буфер!');
+                        });
+                    },
+
+                    // COMPARISON
+                    toggleComparison(plant) {
+                        const idx = this.comparisonList.findIndex(p => p.id === plant.id);
+                        if (idx >= 0) {
+                            this.comparisonList.splice(idx, 1);
+                            this.showToast(`«${plant.title}» убран из сравнения`);
+                        } else {
+                            if (this.comparisonList.length >= 3) {
+                                this.showToast('Можно сравнить не более 3 саженцев');
+                                return;
+                            }
+                            this.comparisonList.push(plant);
+                            this.showToast(`«${plant.title}» добавлен к сравнению`);
+                        }
+                        this.saveStorage();
+                    },
+
+                    isInComparison(plant) {
+                        return this.comparisonList.some(p => p.id === plant.id);
+                    },
+
+                    // MODAL
+                    openModal(plant) {
+                        this.currentPlant = plant;
+                        this.activePhotoIndex = 0;
+                        this.modalOpen = true;
+                        this.isFullScreen = false;
+                    },
+
+                    closeModal() {
+                        this.modalOpen = false;
+                    },
+
+                    // FULLSCREEN
+                    openFullScreen() {
+                        this.isFullScreen = true;
+                    },
+
+                    nextPhoto() {
+                        if (this.currentPlant.media && this.currentPlant.media.length > 1) {
+                            this.activePhotoIndex = (this.activePhotoIndex + 1) % this.currentPlant.media.length;
+                        }
+                    },
+
+                    prevPhoto() {
+                        if (this.currentPlant.media && this.currentPlant.media.length > 1) {
+                            this.activePhotoIndex = (this.activePhotoIndex - 1 + this.currentPlant.media.length) % this.currentPlant.media.length;
+                        }
+                    },
+
+                    // TOAST
+                    showToast(message) {
+                        if (this.toastTimer) clearTimeout(this.toastTimer);
+                        this.toastMessage = message;
+                        this.toastTimer = setTimeout(() => {
+                            this.toastMessage = '';
+                        }, 2500);
+                    },
+
+                    // CARE
+                    getCare(group) {
+                        const g = (group || '').toLowerCase();
+                        if (g.includes('яблоня') || g.includes('груша')) {
+                            return { light: 'Солнечное место', water: 'Умеренный полив, не заливать' };
+                        }
+                        if (g.includes('вишня') || g.includes('черешня')) {
+                            return { light: 'Солнечное, защищённое от ветра', water: 'Полив в засуху, не переувлажнять' };
+                        }
+                        if (g.includes('слива')) {
+                            return { light: 'Солнечное место', water: 'Умеренный полив, любит влагу' };
+                        }
+                        return { light: 'Солнечное или полутень', water: 'Умеренный полив' };
                     }
-                    this.saveStorage();
-                },
-
-                isInComparison(plant) {
-                    return this.comparisonList.some(p => p.id === plant.id);
-                },
-
-                // ===== MODAL =====
-                openModal(plant) {
-                    this.currentPlant = plant;
-                    this.activePhotoIndex = 0;
-                    this.modalOpen = true;
-                    this.isFullScreen = false;
-                },
-
-                closeModal() {
-                    this.modalOpen = false;
-                },
-
-                // ===== FULLSCREEN =====
-                openFullScreen() {
-                    this.isFullScreen = true;
-                },
-
-                nextPhoto() {
-                    if (this.currentPlant.media && this.currentPlant.media.length > 1) {
-                        this.activePhotoIndex = (this.activePhotoIndex + 1) % this.currentPlant.media.length;
-                    }
-                },
-
-                prevPhoto() {
-                    if (this.currentPlant.media && this.currentPlant.media.length > 1) {
-                        this.activePhotoIndex = (this.activePhotoIndex - 1 + this.currentPlant.media.length) % this.currentPlant.media.length;
-                    }
-                },
-
-                // ===== TOAST =====
-                showToast(message) {
-                    if (this.toastTimer) clearTimeout(this.toastTimer);
-                    this.toastMessage = message;
-                    this.toastTimer = setTimeout(() => {
-                        this.toastMessage = '';
-                    }, 2500);
-                },
-
-                // ===== CARE =====
-                getCare(group) {
-                    const g = (group || '').toLowerCase();
-                    if (g.includes('яблоня') || g.includes('груша')) {
-                        return { light: 'Солнечное место', water: 'Умеренный полив, не заливать' };
-                    }
-                    if (g.includes('вишня') || g.includes('черешня')) {
-                        return { light: 'Солнечное, защищённое от ветра', water: 'Полив в засуху, не переувлажнять' };
-                    }
-                    if (g.includes('слива')) {
-                        return { light: 'Солнечное место', water: 'Умеренный полив, любит влагу' };
-                    }
-                    return { light: 'Солнечное или полутень', water: 'Умеренный полив' };
-                }
-            };
+                };
+            });
         });
-    });
-})();
-</script>
 
+        console.log('Alpine event listener added');
+    })();
+</script>
 </body>
 </html>
