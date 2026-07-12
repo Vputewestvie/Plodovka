@@ -562,4 +562,99 @@
                     this.selectionList.forEach(p => {
                         text += `• ${p.title} (${p.price} ₽)\n`;
                     });
-                   
+                    text += `\nИтого: ${this.calculateTotal()} ₽.`;
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.showToast('Список скопирован в буфер!');
+                    }).catch(() => {
+                        // fallback для старых браузеров
+                        const textarea = document.createElement('textarea');
+                        textarea.value = text;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        this.showToast('Список скопирован в буфер!');
+                    });
+                },
+
+                // ===== COMPARISON =====
+                toggleComparison(plant) {
+                    const idx = this.comparisonList.findIndex(p => p.id === plant.id);
+                    if (idx >= 0) {
+                        this.comparisonList.splice(idx, 1);
+                        this.showToast(`«${plant.title}» убран из сравнения`);
+                    } else {
+                        if (this.comparisonList.length >= 3) {
+                            this.showToast('Можно сравнить не более 3 саженцев');
+                            return;
+                        }
+                        this.comparisonList.push(plant);
+                        this.showToast(`«${plant.title}» добавлен к сравнению`);
+                    }
+                    this.saveStorage();
+                },
+
+                isInComparison(plant) {
+                    return this.comparisonList.some(p => p.id === plant.id);
+                },
+
+                // ===== MODAL =====
+                openModal(plant) {
+                    this.currentPlant = plant;
+                    this.activePhotoIndex = 0;
+                    this.modalOpen = true;
+                    this.isFullScreen = false;
+                },
+
+                closeModal() {
+                    this.modalOpen = false;
+                },
+
+                // ===== FULLSCREEN =====
+                openFullScreen() {
+                    this.isFullScreen = true;
+                },
+
+                nextPhoto() {
+                    if (this.currentPlant.media && this.currentPlant.media.length > 1) {
+                        this.activePhotoIndex = (this.activePhotoIndex + 1) % this.currentPlant.media.length;
+                    }
+                },
+
+                prevPhoto() {
+                    if (this.currentPlant.media && this.currentPlant.media.length > 1) {
+                        this.activePhotoIndex = (this.activePhotoIndex - 1 + this.currentPlant.media.length) % this.currentPlant.media.length;
+                    }
+                },
+
+                // ===== TOAST =====
+                showToast(message) {
+                    if (this.toastTimer) clearTimeout(this.toastTimer);
+                    this.toastMessage = message;
+                    this.toastTimer = setTimeout(() => {
+                        this.toastMessage = '';
+                    }, 2500);
+                },
+
+                // ===== CARE =====
+                getCare(group) {
+                    const g = (group || '').toLowerCase();
+                    if (g.includes('яблоня') || g.includes('груша')) {
+                        return { light: 'Солнечное место', water: 'Умеренный полив, не заливать' };
+                    }
+                    if (g.includes('вишня') || g.includes('черешня')) {
+                        return { light: 'Солнечное, защищённое от ветра', water: 'Полив в засуху, не переувлажнять' };
+                    }
+                    if (g.includes('слива')) {
+                        return { light: 'Солнечное место', water: 'Умеренный полив, любит влагу' };
+                    }
+                    return { light: 'Солнечное или полутень', water: 'Умеренный полив' };
+                }
+            };
+        });
+    });
+})();
+</script>
+
+</body>
+</html>
