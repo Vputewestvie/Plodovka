@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Alpine без defer, чтобы он был доступен сразу -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
     <style>
         [x-cloak] { display: none !important; }
@@ -138,9 +137,10 @@
 
                     <div class="p-5 flex flex-col flex-1">
                         <h3 class="font-serif text-xl font-bold text-[#1C352D] cursor-pointer hover:text-[#B48B5C] transition" @click="openModal(plant)" x-text="plant.title"></h3>
+                        <!-- ИСПРАВЛЕННЫЙ X-FOR ДЛЯ ДЕТАЛЕЙ -->
                         <div class="mt-2 flex flex-wrap gap-1.5 text-xs text-[#5B7065]">
-                            <template x-for="(value, key) in Object.entries(plant.details).slice(0, 3)" :key="key[0]">
-                                <span class="bg-[#FAF9F5] px-2 py-0.5 rounded-full" x-text="value[1]"></span>
+                            <template x-for="(item, idx) in Object.entries(plant.details || {}).slice(0, 3)" :key="idx">
+                                <span class="bg-[#FAF9F5] px-2 py-0.5 rounded-full" x-text="item[1]"></span>
                             </template>
                         </div>
                         <div class="mt-auto pt-4 flex items-center justify-between">
@@ -199,11 +199,12 @@
                     <span class="text-xs uppercase tracking-wider text-[#B48B5C] font-semibold" x-text="currentPlant.group"></span>
                     <h2 class="font-serif text-3xl font-bold text-[#1C352D] mt-1 leading-tight" x-text="currentPlant.title"></h2>
 
+                    <!-- ИСПРАВЛЕННЫЙ X-FOR ДЛЯ ДЕТАЛЕЙ В МОДАЛКЕ -->
                     <div class="mt-5 space-y-3 text-sm">
-                        <template x-for="(value, key) in currentPlant.details" :key="key">
+                        <template x-for="(item, idx) in Object.entries(currentPlant.details || {})" :key="idx">
                             <div class="flex border-b border-[#5B7065]/10 py-2.5">
-                                <span class="font-semibold text-[#5B7065] w-28 flex-shrink-0 capitalize" x-text="key + ':'"></span>
-                                <span class="text-[#1C352D]" x-text="value"></span>
+                                <span class="font-semibold text-[#5B7065] w-28 flex-shrink-0 capitalize" x-text="item[0] + ':'"></span>
+                                <span class="text-[#1C352D]" x-text="item[1]"></span>
                             </div>
                         </template>
                     </div>
@@ -283,12 +284,13 @@
                                     <td class="py-4 px-5 font-bold text-xl" x-text="item.price + ' ₽'"></td>
                                 </template>
                             </tr>
+                            <!-- ИСПРАВЛЕННЫЙ X-FOR ДЛЯ ДЕТАЛЕЙ В СРАВНЕНИИ -->
                             <tr x-show="comparisonList.length && comparisonList[0].details">
                                 <td class="py-4 font-bold text-gray-400 text-xs uppercase">Детали</td>
                                 <template x-for="item in comparisonList" :key="item.id">
                                     <td class="py-4 px-5 text-xs space-y-0.5">
-                                        <template x-for="(val, key) in Object.entries(item.details).slice(0, 4)" :key="key[0]">
-                                            <div><span class="font-semibold text-[#5B7065]" x-text="key[0]+':'"></span> <span x-text="val[1]"></span></div>
+                                        <template x-for="(entry, idx) in Object.entries(item.details || {}).slice(0, 4)" :key="idx">
+                                            <div><span class="font-semibold text-[#5B7065]" x-text="entry[0]+':'"></span> <span x-text="entry[1]"></span></div>
                                         </template>
                                     </td>
                                 </template>
@@ -318,7 +320,6 @@
 </div>
 
 <script>
-    // Ждём, пока Alpine загрузится
     function waitForAlpine(callback) {
         if (typeof Alpine !== 'undefined') {
             callback();
@@ -328,9 +329,7 @@
     }
 
     waitForAlpine(function() {
-        console.log('Alpine is ready, registering catalogApp...');
         Alpine.data('catalogApp', function() {
-            console.log('catalogApp component created');
             return {
                 // STATE
                 plants: [],
@@ -354,7 +353,6 @@
 
                 // INIT
                 async init() {
-                    console.log('catalogApp init() called');
                     this.restoreStorage();
                     await this.loadData();
                 },
@@ -412,7 +410,6 @@
 
                         this.groups = ['all', ...new Set(this.plants.map(p => p.group))];
                         this.loading = false;
-                        console.log('✅ Loaded', this.plants.length, 'plants');
                     } catch (err) {
                         console.error('Load error:', err);
                         this.error = true;
@@ -634,7 +631,6 @@
                 }
             };
         });
-        console.log('catalogApp registered successfully');
     });
 </script>
 </body>
