@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
     <style>
         [x-cloak] { display: none !important; }
         body { background: #FAF9F5; font-family: 'Inter', sans-serif; color: #1C352D; }
@@ -137,7 +136,6 @@
 
                     <div class="p-5 flex flex-col flex-1">
                         <h3 class="font-serif text-xl font-bold text-[#1C352D] cursor-pointer hover:text-[#B48B5C] transition" @click="openModal(plant)" x-text="plant.title"></h3>
-                        <!-- ИСПРАВЛЕННЫЙ X-FOR ДЛЯ ДЕТАЛЕЙ -->
                         <div class="mt-2 flex flex-wrap gap-1.5 text-xs text-[#5B7065]">
                             <template x-for="(item, idx) in Object.entries(plant.details || {}).slice(0, 3)" :key="idx">
                                 <span class="bg-[#FAF9F5] px-2 py-0.5 rounded-full" x-text="item[1]"></span>
@@ -199,7 +197,6 @@
                     <span class="text-xs uppercase tracking-wider text-[#B48B5C] font-semibold" x-text="currentPlant.group"></span>
                     <h2 class="font-serif text-3xl font-bold text-[#1C352D] mt-1 leading-tight" x-text="currentPlant.title"></h2>
 
-                    <!-- ИСПРАВЛЕННЫЙ X-FOR ДЛЯ ДЕТАЛЕЙ В МОДАЛКЕ -->
                     <div class="mt-5 space-y-3 text-sm">
                         <template x-for="(item, idx) in Object.entries(currentPlant.details || {})" :key="idx">
                             <div class="flex border-b border-[#5B7065]/10 py-2.5">
@@ -284,7 +281,6 @@
                                     <td class="py-4 px-5 font-bold text-xl" x-text="item.price + ' ₽'"></td>
                                 </template>
                             </tr>
-                            <!-- ИСПРАВЛЕННЫЙ X-FOR ДЛЯ ДЕТАЛЕЙ В СРАВНЕНИИ -->
                             <tr x-show="comparisonList.length && comparisonList[0].details">
                                 <td class="py-4 font-bold text-gray-400 text-xs uppercase">Детали</td>
                                 <template x-for="item in comparisonList" :key="item.id">
@@ -319,16 +315,9 @@
 
 </div>
 
+<!-- ====== СКРИПТ РЕГИСТРАЦИИ КОМПОНЕНТА ПЕРЕД ЗАГРУЗКОЙ ALPINE ====== -->
 <script>
-    function waitForAlpine(callback) {
-        if (typeof Alpine !== 'undefined') {
-            callback();
-        } else {
-            setTimeout(function() { waitForAlpine(callback); }, 50);
-        }
-    }
-
-    waitForAlpine(function() {
+    document.addEventListener('alpine:init', function() {
         Alpine.data('catalogApp', function() {
             return {
                 // STATE
@@ -633,5 +622,8 @@
         });
     });
 </script>
+
+<!-- ====== ЗАГРУЗКА ALPINE ПОСЛЕ РЕГИСТРАЦИИ ====== -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 </body>
 </html>
