@@ -81,7 +81,7 @@
     </header>
 
     <main class="max-w-[1600px] mx-auto px-4 py-8">
-        <!-- ЗАГРУЗКА / ОШИБКА -->
+        <!-- ЗАГРУЗКА -->
         <div x-show="loading" class="text-center py-20">
             <div class="spinner"></div>
             <p class="mt-4 text-botanical-sage">Загрузка каталога...</p>
@@ -91,7 +91,7 @@
             <p class="text-sm mt-2" x-text="errorMessage || 'Попробуйте обновить страницу или зайдите позже.'"></p>
         </div>
 
-        <!-- ФИЛЬТРЫ + СОРТИРОВКА -->
+        <!-- ФИЛЬТРЫ -->
         <div x-show="!loading && !error" class="bg-white rounded-3xl p-6 shadow-sm border border-botanical-sage/10 mb-8">
             <div class="flex flex-col lg:flex-row gap-6 justify-between items-center">
                 <div class="flex flex-wrap gap-2">
@@ -124,7 +124,6 @@
         <div x-show="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-24">
             <template x-for="plant in sortedPlants" :key="plant.id">
                 <div class="bg-white rounded-3xl border border-botanical-sage/10 shadow-sm overflow-hidden flex flex-col hover:shadow-xl transition duration-300">
-
                     <div class="relative aspect-[4/3] bg-botanical-cream overflow-hidden cursor-pointer" @click="openModal(plant)">
                         <img :src="plant.media[0]" loading="lazy" class="w-full h-full object-contain hover:scale-105 transition duration-500">
                         <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] uppercase font-semibold text-botanical-gold shadow-sm" x-text="plant.group"></div>
@@ -132,13 +131,11 @@
                             <span :class="plant.stock > 0 ? 'bg-emerald-500/90 text-white' : 'bg-rose-500/90 text-white'" class="px-3 py-1 rounded-full text-[10px] uppercase font-bold" x-text="plant.stock > 0 ? 'В наличии' : 'Ожидается'"></span>
                         </div>
                     </div>
-
                     <div class="p-6 flex flex-col flex-grow">
                         <h3 class="font-serif text-xl font-bold leading-tight text-botanical-deep cursor-pointer" @click="openModal(plant)">
                             <span x-text="plant.number ? '№' + plant.number + ' ' : ''"></span><span x-text="plant.title"></span>
                         </h3>
                         <div class="flex flex-wrap gap-2 my-4 text-xs text-botanical-sage border-y border-botanical-sage/5 py-3">
-                            <!-- Динамические теги (все остальные поля, кроме основных) -->
                             <template x-for="(value, key) in plant.details" :key="key">
                                 <span x-show="value" class="bg-botanical-cream px-2 py-1 rounded-full">
                                     <span class="font-semibold" x-text="key + ':'"></span> <span x-text="value"></span>
@@ -148,7 +145,7 @@
                         <div class="mt-auto pt-2 flex justify-between items-center gap-2">
                             <span class="text-2xl font-bold text-botanical-deep" x-text="plant.price + ' ₽'"></span>
                             <div class="flex gap-2">
-                                <button @click="toggleComparison(plant)" :class="isInComparison(plant) ? 'bg-botanical-gold text-white' : 'bg-botanical-cream text-botanical-deep hover:bg-botanical-sage/10'" class="p-2.5 rounded-xl text-sm transition" title="Сравнить" aria-label="Сравнить">⚖️</button>
+                                <button @click="toggleComparison(plant)" :class="isInComparison(plant) ? 'bg-botanical-gold text-white' : 'bg-botanical-cream text-botanical-deep hover:bg-botanical-sage/10'" class="p-2.5 rounded-xl text-sm transition" title="Сравнить">⚖️</button>
                                 <button @click="toggleSelection(plant)" :class="isSelected(plant) ? 'bg-botanical-deep text-white' : 'border-2 border-botanical-deep text-botanical-deep hover:bg-botanical-cream'" class="px-4 py-2 rounded-xl text-sm font-semibold transition" x-text="isSelected(plant) ? 'В корзине' : 'Выбрать'"></button>
                             </div>
                         </div>
@@ -162,7 +159,7 @@
         </div>
     </main>
 
-    <!-- МОДАЛКА ПОДРОБНОГО ПРОСМОТРА -->
+    <!-- МОДАЛКА (сокращённо, без изменений логики) -->
     <div x-show="modalOpen" x-cloak class="fixed inset-0 z-40 overflow-y-auto" x-transition>
         <div class="flex items-center justify-center min-h-screen px-4 py-6">
             <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="closeModal()"></div>
@@ -187,8 +184,6 @@
                     <span class="text-xs uppercase tracking-wider text-botanical-gold font-semibold" x-text="capitalize(currentPlant.group || '')"></span>
                     <h2 class="font-serif text-3xl font-bold text-botanical-deep mt-2 leading-tight" x-text="(currentPlant.number ? '№' + currentPlant.number + ' ' : '') + currentPlant.title"></h2>
                     <p class="text-sm text-botanical-sage italic mt-1" x-text="currentPlant.latinTitle || 'Саженец плодового дерева'"></p>
-
-                    <!-- Детальная информация (все поля) -->
                     <div class="mt-6 space-y-2">
                         <template x-for="(value, key) in currentPlant.details" :key="key">
                             <div x-show="value" class="flex items-start gap-3 text-sm text-botanical-deep border-b border-botanical-sage/5 py-2">
@@ -197,26 +192,18 @@
                             </div>
                         </template>
                     </div>
-
-                    <!-- Описание (если есть) -->
                     <div x-show="currentPlant.description" class="mt-4 space-y-3 text-sm text-botanical-deep bg-botanical-cream p-4 rounded-xl">
                         <template x-for="bullet in currentPlant.bullets" :key="bullet">
-                            <div class="flex items-start gap-3">
-                                <span class="text-botanical-gold text-lg leading-none mt-0.5">•</span>
-                                <span x-text="bullet"></span>
-                            </div>
+                            <div class="flex items-start gap-3"><span class="text-botanical-gold text-lg leading-none mt-0.5">•</span><span x-text="bullet"></span></div>
                         </template>
                     </div>
-
                     <div class="mt-8 bg-botanical-cream p-5 rounded-2xl border border-botanical-sage/10">
                         <h4 class="text-xs uppercase tracking-wider font-bold text-botanical-gold mb-4">🌿 Рекомендации по уходу</h4>
                         <div class="text-sm space-y-3 text-botanical-deep">
                             <div><span class="font-semibold block text-botanical-sage text-xs">ОСВЕЩЕНИЕ</span> <span x-text="getCare(currentPlant.group).light"></span></div>
                             <div><span class="font-semibold block text-botanical-sage text-xs mt-2">ПОЛИВ</span> <span x-text="getCare(currentPlant.group).water"></span></div>
-                            <div x-show="getCare(currentPlant.group).soil"><span class="font-semibold block text-botanical-sage text-xs mt-2">ПОЧВА</span> <span x-text="getCare(currentPlant.group).soil"></span></div>
                         </div>
                     </div>
-
                     <div class="mt-10 pt-6 border-t border-botanical-sage/10 flex justify-between items-center gap-4">
                         <span class="text-3xl font-bold text-botanical-deep" x-text="currentPlant.price + ' ₽'"></span>
                         <button @click="toggleSelection(currentPlant)" :class="isSelected(currentPlant) ? 'bg-botanical-gold text-white' : 'bg-botanical-deep text-white'" class="px-8 py-4 rounded-xl font-bold transition shadow-lg hover:shadow-xl hover:-translate-y-1" x-text="isSelected(currentPlant) ? 'В списке' : 'Выбрать'"></button>
@@ -236,9 +223,7 @@
         </div>
         <button x-show="currentPlant.media && currentPlant.media.length > 1" @click.stop="prevPhoto()" class="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-botanical-gold w-12 h-16 flex items-center justify-center text-3xl font-bold rounded-xl transition-colors duration-200 z-[110]">&#10094;</button>
         <button x-show="currentPlant.media && currentPlant.media.length > 1" @click.stop="nextPhoto()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-botanical-gold w-12 h-16 flex items-center justify-center text-3xl font-bold rounded-xl transition-colors duration-200 z-[110]">&#10095;</button>
-        <div x-show="currentPlant.media && currentPlant.media.length > 1" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-sm font-semibold tracking-wider">
-            Фото <span x-text="activePhotoIndex + 1"></span> из <span x-text="currentPlant.media.length"></span>
-        </div>
+        <div x-show="currentPlant.media && currentPlant.media.length > 1" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-sm font-semibold tracking-wider">Фото <span x-text="activePhotoIndex + 1"></span> из <span x-text="currentPlant.media.length"></span></div>
     </div>
 
     <!-- БАР СРАВНЕНИЯ -->
@@ -256,14 +241,12 @@
                 <button @click="comparisonOpen = false" class="absolute top-5 right-5 bg-gray-100 p-2 rounded-full font-bold">✕</button>
                 <h3 class="font-serif text-3xl font-bold mb-8 text-botanical-deep">Сравнение саженцев</h3>
                 <table class="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                        <tr class="border-b-2 border-gray-100">
-                            <th class="py-4 font-bold text-gray-400 text-xs uppercase w-1/4">Параметр</th>
-                            <template x-for="item in comparisonList" :key="item.id">
-                                <th class="py-4 px-4 font-serif text-xl text-botanical-deep font-bold" x-text="item.title"></th>
-                            </template>
-                        </tr>
-                    </thead>
+                    <thead><tr class="border-b-2 border-gray-100">
+                        <th class="py-4 font-bold text-gray-400 text-xs uppercase w-1/4">Параметр</th>
+                        <template x-for="item in comparisonList" :key="item.id">
+                            <th class="py-4 px-4 font-serif text-xl text-botanical-deep font-bold" x-text="item.title"></th>
+                        </template>
+                    </tr></thead>
                     <tbody class="text-sm text-botanical-deep">
                         <tr class="border-b border-gray-100"><td class="py-4 font-bold text-gray-400 text-xs uppercase">Фото</td>
                             <template x-for="item in comparisonList" :key="item.id">
@@ -280,15 +263,6 @@
                                 <td class="py-4 px-4 font-bold text-xl" x-text="item.price + ' ₽'"></td>
                             </template>
                         </tr>
-                        <!-- Динамические поля из деталей -->
-                        <template x-for="(value, key) in comparisonList[0]?.details || {}" :key="key">
-                            <tr class="border-b border-gray-100" x-show="comparisonList.every(item => item.details[key])">
-                                <td class="py-4 font-bold text-gray-400 text-xs uppercase" x-text="key"></td>
-                                <template x-for="item in comparisonList" :key="item.id">
-                                    <td class="py-4 px-4 font-semibold" x-text="item.details[key] || '—'"></td>
-                                </template>
-                            </tr>
-                        </template>
                     </tbody>
                 </table>
             </div>
@@ -314,142 +288,114 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('catalogApp', () => ({
-                // ===== ДАННЫЕ =====
                 plants: [],
                 groups: ['all'],
                 activeGroup: 'all',
                 searchQuery: '',
                 onlyInStock: false,
                 sortBy: 'group',
-
                 loading: true,
                 error: false,
                 errorMessage: '',
-
                 selectionList: [],
                 comparisonList: [],
-
                 modalOpen: false,
                 currentPlant: { media: [], title: '', group: '', details: {}, bullets: [] },
                 activePhotoIndex: 0,
                 comparisonOpen: false,
                 isFullScreen: false,
-
                 toastMessage: '',
                 toastTimeout: null,
 
-                // ===== ЗАГРУЗКА И ПАРСИНГ =====
                 async init() {
                     this.restoreFromStorage();
 
                     try {
                         const id = '1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk';
-                        const res = await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json`);
-                        const text = await res.text();
+                        const res = await fetch(`https://docs.google.com/spreadsheets/d/${id}/export?format=csv`);
+                        
+                        if (!res.ok) throw new Error('Не удалось загрузить таблицу');
+                        
+                        const csvText = await res.text();
+                        const rows = csvText.split('\n').filter(row => row.trim());
 
-                        const startIdx = text.indexOf('{');
-                        const endIdx = text.lastIndexOf('}');
-                        if (startIdx === -1) throw new Error('Неверный формат ответа от Google');
+                        // Получаем заголовки
+                        const headers = rows[0].split(',').map(h => h.trim().toLowerCase());
+                        console.log('🔍 Заголовки таблицы:', headers);
 
-                        const json = JSON.parse(text.substring(startIdx, endIdx + 1));
+                        // Парсим данные
+                        this.plants = rows.slice(1).map((row, i) => {
+                            const values = row.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                            
+                            // Создаём объект по заголовкам
+                            const obj = {};
+                            headers.forEach((header, index) => {
+                                obj[header] = values[index] || '';
+                            });
 
-                        // Функция для безопасного получения значения
-                        const getVal = (row, idx) => {
-                            if (!row || !row.c || !row.c[idx] || row.c[idx].v === null || row.c[idx].v === undefined) return '';
-                            return String(row.c[idx].v).trim();
-                        };
-
-                        // Определяем индексы столбцов по заголовкам (первая строка)
-                        const headerRow = json.table.rows[0];
-                        const headerIndex = {};
-                        const columnNames = [];
-
-                        headerRow.c.forEach((cell, index) => {
-                            if (cell && cell.v) {
-                                const headerName = String(cell.v).trim().toLowerCase();
-                                headerIndex[headerName] = index;
-                                columnNames.push(headerName);
-                            }
-                        });
-
-                        console.log('🔍 Найденные столбцы:', headerIndex);
-
-                        // Базовые поля, которые мы всегда ищем
-                        const baseFields = ['название', '№', 'номер', 'наличие', 'количество', 'латинское', 'латинское название', 'группа', 'цена', 'описание', 'цвет'];
-
-                        this.plants = json.table.rows.slice(1).map((row, i) => {
-                            // Вспомогательная функция для получения значения по имени столбца
-                            const col = (name) => {
-                                const idx = headerIndex[name.toLowerCase()];
-                                if (idx === undefined) return '';
-                                return getVal(row, idx);
-                            };
-
-                            const title = col('название');
+                            const title = obj['название'] || obj['название сорта'] || obj['сорт'] || '';
                             if (!title) return null;
 
-                            // Парсим описание
-                            const desc = col('описание');
-                            let bullets = [];
-                            if (desc) {
-                                const items = desc.split('•').map(b => b.trim()).filter(b => b);
-                                bullets = items.length ? items : [desc];
-                            }
-
-                            // Парсим фото (из любых столбцов, содержащих "фото" или "ссылка")
+                            // Парсим фото
                             const mediaList = [];
-                            columnNames.forEach(colName => {
-                                if (colName.includes('фото') || colName.includes('ссылка')) {
-                                    const val = col(colName);
+                            Object.keys(obj).forEach(key => {
+                                if (key.includes('фото') || key.includes('ссылка') || key.includes('image')) {
+                                    const val = obj[key];
                                     if (val) {
                                         const urls = val.split(/[|, \n]+/).map(s => s.trim()).filter(s => s.startsWith('http'));
                                         mediaList.push(...urls);
                                     }
                                 }
                             });
+                            if (mediaList.length === 0) mediaList.push('https://via.placeholder.com/600?text=Нет+фото');
 
-                            if (mediaList.length === 0) {
-                                mediaList.push('https://via.placeholder.com/600?text=Нет+фото');
+                            // Парсим описание
+                            const desc = obj['описание'] || obj['характеристики'] || '';
+                            let bullets = [];
+                            if (desc) {
+                                const items = desc.split('•').map(b => b.trim()).filter(b => b);
+                                bullets = items.length ? items : [desc];
                             }
 
-                            // Собираем все детали (кроме базовых полей)
+                            // Определяем группу
+                            const group = obj['группа'] || obj['тип'] || obj['вид'] || 'other';
+
+                            // Собираем все детали (кроме базовых)
+                            const baseFields = ['название', 'название сорта', 'сорт', '№', 'номер', 'наличие', 'количество', 'латинское', 'латинское название', 'группа', 'тип', 'вид', 'цена', 'описание', 'характеристики', 'цвет', 'фото1', 'фото2', 'ссылка1', 'ссылка2', 'фото', 'image', 'images'];
                             const details = {};
-                            const baseFieldNames = ['название', '№', 'номер', 'наличие', 'количество', 'латинское', 'латинское название', 'группа', 'цена', 'описание', 'цвет', 'фото1', 'фото2', 'ссылка1', 'ссылка2', 'фото'];
-                            columnNames.forEach(colName => {
-                                if (!baseFieldNames.includes(colName)) {
-                                    const val = col(colName);
-                                    if (val) {
-                                        details[colName] = val;
-                                    }
+                            Object.keys(obj).forEach(key => {
+                                if (!baseFields.includes(key) && obj[key]) {
+                                    details[key] = obj[key];
                                 }
                             });
 
                             return {
                                 id: i,
-                                number: col('№') || col('номер') || '',
+                                number: obj['№'] || obj['номер'] || '',
                                 title: title,
-                                stock: Number(col('наличие')) || Number(col('количество')) || 0,
-                                latinTitle: col('латинское') || col('латинское название') || '',
-                                group: String(col('группа') || 'all').toLowerCase(),
-                                price: Number(col('цена')) || 0,
+                                stock: Number(obj['наличие']) || Number(obj['количество']) || 0,
+                                latinTitle: obj['латинское'] || obj['латинское название'] || '',
+                                group: String(group || 'all').toLowerCase(),
+                                price: Number(obj['цена']) || 0,
                                 description: desc,
-                                color: col('цвет') || '',
+                                color: obj['цвет'] || '',
                                 media: mediaList,
                                 bullets: bullets,
-                                details: details // ← все остальные поля
+                                details: details
                             };
                         }).filter(p => p !== null);
 
                         this.groups = ['all', ...new Set(this.plants.map(p => p.group))];
                         this.loading = false;
+                        
+                        console.log('✅ Загружено сортов:', this.plants.length);
                     } catch (e) {
-                        console.error('Ошибка загрузки:', e);
+                        console.error('❌ Ошибка загрузки:', e);
                         this.error = true;
-                        this.errorMessage = e.message || 'Неизвестная ошибка';
+                        this.errorMessage = e.message || 'Неизвестная ошибка при загрузке данных';
                         this.loading = false;
                     }
 
-                    // Синхронизация сохранённых списков
                     this.selectionList = this.selectionList.filter(p => this.plants.some(pl => pl.id === p.id));
                     this.comparisonList = this.comparisonList.filter(p => this.plants.some(pl => pl.id === p.id));
                     this.saveToStorage();
@@ -462,7 +408,7 @@
                         const comp = JSON.parse(localStorage.getItem('fruit_comparison'));
                         if (Array.isArray(sel)) this.selectionList = sel;
                         if (Array.isArray(comp)) this.comparisonList = comp;
-                    } catch (e) { /* игнорируем */ }
+                    } catch (e) {}
                 },
                 saveToStorage() {
                     localStorage.setItem('fruit_selection', JSON.stringify(this.selectionList));
@@ -486,4 +432,34 @@
                         case 'price-desc': return list.sort((a,b) => b.price - a.price);
                         case 'name-asc':   return list.sort((a,b) => a.title.localeCompare(b.title));
                         case 'name-desc':  return list.sort((a,b) => b.title.localeCompare(a.title));
-                        case 'stock':      return list.sort((a,b) => (b.stock > 0) - (a.st
+                        case 'stock':      return list.sort((a,b) => (b.stock > 0) - (a.stock > 0));
+                        default: return list;
+                    }
+                },
+
+                // ===== КОРЗИНА =====
+                toggleSelection(p) {
+                    const idx = this.selectionList.findIndex(item => item.id === p.id);
+                    if (idx > -1) {
+                        this.selectionList.splice(idx, 1);
+                        this.showToast(`«${p.title}» убран`);
+                    } else {
+                        this.selectionList.push(p);
+                        this.showToast(`«${p.title}» добавлен`);
+                    }
+                    this.saveToStorage();
+                },
+                isSelected(p) { return this.selectionList.some(item => item.id === p.id); },
+                calculateTotal() { return this.selectionList.reduce((sum, p) => sum + p.price, 0); },
+                clearSelection() {
+                    this.selectionList = [];
+                    this.saveToStorage();
+                    this.showToast('Корзина очищена');
+                },
+
+                // ===== СРАВНЕНИЕ =====
+                toggleComparison(p) {
+                    const idx = this.comparisonList.findIndex(item => item.id === p.id);
+                    if (idx > -1) {
+                        this.comparisonList.splice(idx, 1);
+                       
