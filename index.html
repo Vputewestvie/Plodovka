@@ -315,10 +315,13 @@
 
 </div>
 
-<!-- ====== СКРИПТ РЕГИСТРАЦИИ КОМПОНЕНТА ПЕРЕД ЗАГРУЗКОЙ ALPINE ====== -->
+<!-- ====== РЕГИСТРАЦИЯ КОМПОНЕНТА ДО ЗАГРУЗКИ ALPINE ====== -->
 <script>
+    // Регистрируем компонент до того, как Alpine начнёт обработку DOM
     document.addEventListener('alpine:init', function() {
+        console.log('alpine:init fired – registering catalogApp');
         Alpine.data('catalogApp', function() {
+            console.log('catalogApp component created');
             return {
                 // STATE
                 plants: [],
@@ -342,6 +345,7 @@
 
                 // INIT
                 async init() {
+                    console.log('catalogApp init() called');
                     this.restoreStorage();
                     await this.loadData();
                 },
@@ -399,6 +403,7 @@
 
                         this.groups = ['all', ...new Set(this.plants.map(p => p.group))];
                         this.loading = false;
+                        console.log('✅ Loaded', this.plants.length, 'plants');
                     } catch (err) {
                         console.error('Load error:', err);
                         this.error = true;
@@ -620,6 +625,7 @@
                 }
             };
         });
+        console.log('catalogApp registered successfully');
     });
 </script>
 
