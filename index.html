@@ -3,11 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Саженцы плодовых культур</title>
-    <!-- Подключение Tailwind CSS -->
+    
+    <!-- SEO Meta -->
+    <title>Саженцы плодовых культур — Купить саженцы в Севастополе | Сад и Огород</title>
+    <meta name="description" content="🏡 Саженцы плодовых деревьев и ягодных культур в Севастополе. Жимолость, смородина, крыжовник, малина. Доставка по РФ. Заказывайте через Авито!">
+    <meta name="keywords" content="саженцы, плодовые культуры, жимолость, смородина, крыжовник, малина, сад и огород, севастополь, купить саженцы">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Russian">
+    
+    <!-- Open Graph (для соцсетей и мессенджеров) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vputewestvie.github.io/Plodovka/">
+    <meta property="og:title" content="Саженцы плодовых культур — Сад и Огород">
+    <meta property="og:description" content="🏡 Саженцы плодовых деревьев и ягодных культур. Жимолость, смородина, крыжовник, малина. Доставка по РФ.">
+    <meta property="og:image" content="https://vputewestvie.github.io/Plodovka/og-image.jpg">
+    <meta property="og:locale" content="ru_RU">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Саженцы плодовых культур — Сад и Огород">
+    <meta name="twitter:description" content="🏡 Саженцы плодовых деревьев и ягодных культур. Доставка по РФ.">
+    
+    <!-- Favicon (emoji fallback) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+    
+    <!-- JSON-LD Structured Data (Organization + Product) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "Сад и Огород",
+      "description": "Продажа саженцев плодовых культур в Севастополе",
+      "url": "https://vputewestvie.github.io/Plodovka/",
+      "telephone": "+79785848434",
+      "areaServed": ["Севастополь", "Симферополь", "Россия"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Саженцы",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Жимолость" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Смородина" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Крыжовник" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Малина" } }
+        ]
+      }
+    }
+    </script>
+    
+    <!-- Подключение Tailwind CSS (critical inline для скорости) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Подключение PapaParse для надежного чтения Google Таблицы -->
+    
+    <!-- Подключение PapaParse для чтения Google Таблицы -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {

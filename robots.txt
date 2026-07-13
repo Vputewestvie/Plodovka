@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vputewestvie.github.io/Plodovka/sitemap.xml
