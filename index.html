@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Питомник Саженцев — Плодово-ягодные культуры</title>
+    <title>Саженцы плодовых культур в подвале</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключение PapaParse для надежного чтения Google Таблицы -->
@@ -13,7 +13,7 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Стилизация скроллбара для горизонтального меню */
+        /* Скрываем стандартный скроллбар для горизонтального меню категорий */
         .scrollbar-none::-webkit-scrollbar {
             display: none;
         }
@@ -95,14 +95,14 @@
     <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-                <h3 class="text-white font-semibold text-lg mb-4">Питомник «Плодовка»</h3>
-                <p class="text-sm leading-relaxed">Мы выращиваем саженцы ягодных кустарников с отличными вкусовыми качествами и высокой урожайностью. Доставка осуществляется специализированными службами.</p>
+                <h3 class="text-white font-semibold text-lg mb-4">Саженцы плодовых культур в подвале</h3>
+                <p class="text-sm leading-relaxed">Мы предлагаем качественные саженцы ягодных кустарников с отличными вкусовыми качествами и высокой урожайностью. Доставка осуществляется специализированными службами.</p>
             </div>
             <div>
                 <h3 class="text-white font-semibold text-lg mb-4">Доставка и контакты</h3>
                 <p class="text-sm mb-2">🚗 Доставляем на машине по Севастополю, а также периодически в Симферополь.</p>
                 <p class="text-sm mb-2">📦 Возможна отправка транспортными компаниями (ТК) по всей России.</p>
-                <p class="text-sm mb-2">⚠️ <strong class="text-amber-500">Самовывоза нет.</strong> Работаем только через службы доставки.</p>
+                <p class="text-sm mb-2">⚠️ Работаем исключительно через службы доставки.</p>
                 <p class="text-sm mb-2">📞 Телефон для звонков: <a href="tel:+79785848434" class="text-emerald-400 hover:underline font-semibold">+7 (978) 584-84-34</a></p>
                 <p class="text-sm">💬 По всем вопросам, пожалуйста, пишите в сообщения на платформе <strong class="text-emerald-400">Авито</strong> (не в мессенджеры).</p>
             </div>
@@ -114,7 +114,7 @@
         
         <!-- Нижняя строка футера -->
         <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs">
-            <span>© 2026 Питомник саженцев «Плодовка». Все права защищены.</span>
+            <span>© 2026 Саженцы плодовых культур в подвале. Все права защищены.</span>
             
             <!-- Ссылка на разработчика -->
             <a href="https://t.me/Maks_studio_ai" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-3.5 py-2 rounded-full border border-slate-800 hover:border-slate-700">
@@ -211,11 +211,12 @@
         </div>
     </div>
 
-    <!-- Лайтбокс для детального просмотра изображений в максимальном размере -->
+    <!-- Лайтбокс для детального просмотра изображений в оригинальном/максимальном размере -->
     <div id="lightboxModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
         <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-slate-300 bg-white/10 hover:bg-white/20 p-2.5 rounded-full z-10 transition">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
+        <!-- overflow-auto позволяет скроллить увеличенную картинку -->
         <div class="w-full h-full overflow-auto flex items-center justify-center p-2">
             <img id="lightboxImage" src="" alt="Увеличенное изображение" class="max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300" onclick="toggleLightboxZoom(event)">
         </div>
@@ -232,7 +233,7 @@
         // Ссылка на экспорт вашей Google Таблицы в формате CSV
         const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk/export?format=csv&gid=0";
         
-        // Ссылка на ваш профиль или чат на Авито (Замените на свою при необходимости)
+        // Ссылка на ваш профиль или чат на Авито
         const avitoProfileUrl = "https://www.avito.ru"; 
 
         let productsData = [];
@@ -389,6 +390,7 @@
                             </div>
                         </div>
 
+                        <!-- Обязательный event.stopPropagation(), чтобы клик по кнопке не открывал модальное окно -->
                         <button onclick="event.stopPropagation(); addToCart(${p.id})" class="mt-4 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2.5 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Добавить в корзину
@@ -483,7 +485,7 @@
             }
         }
 
-        // Открытие Лайтбокса при клике на картинку в карточке
+        // Открытие Лайтбокса при клике на картинку в карточке детального просмотра
         function openLightboxFromModal() {
             if (currentModalImages && currentModalImages.length > 0) {
                 const src = currentModalImages[activeModalImageIndex];
@@ -496,7 +498,7 @@
             const img = document.getElementById('lightboxImage');
             img.src = src;
             
-            // Сброс зума при новом открытии
+            // Начинаем показ со сжатой картинки (вписанной в экран)
             isLightboxZoomed = false;
             img.className = "max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300";
             
@@ -510,10 +512,11 @@
             isLightboxZoomed = !isLightboxZoomed;
             
             if (isLightboxZoomed) {
-                // Картинка отображается в её максимальном (исходном) размере
-                img.className = "max-w-none max-h-none object-contain select-none cursor-zoom-out transition-all duration-300";
+                // Переключаем на оригинальный (максимальный/физический) размер картинки.
+                // max-w-none и max-h-none заставляют картинку раскрыться на 100% реального разрешения.
+                img.className = "max-w-none max-h-none select-none cursor-zoom-out";
             } else {
-                // Картинка вписывается в экран
+                // Возвращаем вписывание в экран
                 img.className = "max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300";
             }
         }
@@ -630,11 +633,6 @@
                 `;
                 list.appendChild(itemDiv);
             }
-        }
-
-        function toggleCartModal() {
-            const modal = document.getElementById('cartModal');
-            modal.classList.toggle('hidden');
         }
 
         // Логика копирования списка заказа и перенаправления на Авито
