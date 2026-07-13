@@ -6,7 +6,7 @@
     <title>Питомник Саженцев — Плодово-ягодные культуры</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Подключение PapaParse для надёжного чтения Google Таблицы -->
+    <!-- Подключение PapaParse для надежного чтения Google Таблицы -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -20,24 +20,36 @@
     <!-- Шапка / Навигация -->
     <header class="bg-emerald-800 text-white sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight">Сад и Огород</h1>
-                    <p class="text-xs text-emerald-200">Лучшие саженцы плодово-ягодных культур</p>
+            
+            <!-- Блок логотипа и контактного телефона -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full md:w-auto">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight leading-none">Сад и Огород</h1>
+                        <p class="text-[10px] sm:text-xs text-emerald-200 mt-1">Лучшие саженцы плодово-ягодных культур</p>
+                    </div>
                 </div>
+                
+                <!-- Телефон для заказа -->
+                <a href="tel:+79785848434" class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-100 hover:text-white transition font-semibold sm:border-l sm:border-emerald-700 sm:pl-4 mt-1 sm:mt-0" title="Позвонить для заказа саженцев">
+                    <svg class="w-4 h-4 text-emerald-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <span>+7 (978) 584-84-34</span>
+                </a>
             </div>
 
             <!-- Поиск и Корзина -->
-            <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="flex items-center gap-4 w-full md:w-auto">
                 <div class="relative flex-grow sm:flex-grow-0">
                     <input type="text" id="searchInput" placeholder="Поиск сорта..." class="w-full sm:w-64 px-4 py-2 pr-10 rounded-full bg-emerald-900/50 border border-emerald-700 text-white placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
                     <svg class="w-5 h-5 absolute right-3 top-2.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
                 
-                <button onclick="toggleCartModal()" class="relative bg-emerald-600 hover:bg-emerald-500 transition px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium">
+                <button onclick="toggleCartModal()" class="relative bg-emerald-600 hover:bg-emerald-500 transition px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     <span>Корзина</span>
                     <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
@@ -45,20 +57,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Промо-блок (Hero) -->
-    <section class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white py-12 md:py-20 px-4 text-center">
-        <div class="max-w-3xl mx-auto">
-            <span class="bg-emerald-700/60 text-emerald-200 text-xs uppercase tracking-widest px-3 py-1.5 rounded-full font-semibold">Сезон посадки 2026</span>
-            <h2 class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">Проверенные саженцы с гарантией сорта</h2>
-            <p class="text-emerald-100 text-base md:text-lg mb-8 max-w-xl mx-auto">Все растения поставляются с открытой корневой системой (ОКС), полностью адаптированы и готовы к высадке в вашем саду.</p>
-            <div class="flex flex-wrap justify-center gap-4 text-sm">
-                <span class="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> 100% приживаемость</span>
-                <span class="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Контроль качества</span>
-                <span class="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Бережная упаковка</span>
-            </div>
-        </div>
-    </section>
 
     <!-- Главная часть: Фильтры и Список товаров -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
@@ -95,7 +93,9 @@
             <div>
                 <h3 class="text-white font-semibold text-lg mb-4">Контакты и заказ</h3>
                 <p class="text-sm mb-2">📍 Самовывоз из питомника или доставка ТК</p>
-                <p class="text-sm mb-2">📞 Телефон: +7 (999) 000-00-00</p>
+                <p class="text-sm mb-2">
+                    📞 Телефон: <a href="tel:+79785848434" class="text-emerald-400 hover:underline">+7 (978) 584-84-34</a>
+                </p>
                 <p class="text-sm">💬 Пишите в мессенджерах для консультаций</p>
             </div>
             <div>
@@ -103,10 +103,68 @@
                 <p class="text-sm leading-relaxed">Выберите интересующие сорта в каталоге, добавьте их в корзину и отправьте сформированный список менеджеру для подтверждения наличия.</p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
-            © 2026 Питомник саженцев «Плодовка». Все права защищены.
+        
+        <!-- Нижняя строка футера с копирайтом и рекламой разработчика -->
+        <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs">
+            <span>© 2026 Питомник саженцев «Плодовка». Все права защищены.</span>
+            
+            <!-- Ссылка на разработчика -->
+            <a href="https://t.me/Maks_studio_ai" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-3.5 py-2 rounded-full border border-slate-800 hover:border-slate-700">
+                <svg class="w-4 h-4 text-[#229ED9]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.89 1.2-5.33 3.52-.5.35-.96.52-1.37.51-.45-.01-1.32-.26-1.97-.47-.79-.26-1.42-.4-1.37-.85.03-.23.35-.47.96-.72 3.76-1.63 6.27-2.71 7.53-3.23 3.58-1.48 4.32-1.74 4.81-1.75.11 0 .35.03.5.16.13.11.17.26.19.37z"/>
+                </svg>
+                <span>Разработчик: Maks_studio_ai</span>
+            </a>
         </div>
     </footer>
+
+    <!-- Модальное окно деталей товара (Карточка товара) -->
+    <div id="productModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" onclick="event.target.id === 'productModal' && closeProductModal()">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative animate-in fade-in zoom-in-95 duration-200">
+            <!-- Кнопка закрытия -->
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 bg-white/80 hover:bg-white p-2 rounded-full z-10 shadow transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="overflow-y-auto flex-grow flex flex-col md:flex-row">
+                <!-- Изображения товара -->
+                <div class="md:w-1/2 bg-slate-50 flex flex-col justify-center items-center relative min-h-[300px]">
+                    <div id="modalImageContainer" class="w-full h-full flex items-center justify-center">
+                        <!-- Сюда вставляется активное фото -->
+                    </div>
+                    <!-- Слайдер навигация -->
+                    <div id="modalSliderControls" class="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 hidden">
+                        <!-- Точки-переключатели -->
+                    </div>
+                </div>
+                <!-- Контент товара -->
+                <div class="md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
+                    <div>
+                        <span id="modalGroup" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium shadow-sm inline-block mb-3">Группа</span>
+                        <h3 id="modalTitle" class="font-bold text-slate-900 text-xl md:text-2xl leading-tight mb-4">Название товара</h3>
+                        <div id="modalTags" class="flex flex-wrap gap-1.5 mb-6">
+                            <!-- Характеристики -->
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 pt-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <span class="text-slate-400 text-xs block">Цена за саженец</span>
+                                <span id="modalPrice" class="text-2xl font-extrabold text-emerald-800">0 ₽</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-slate-400 text-xs block">В наличии</span>
+                                <span id="modalStock" class="text-xs font-semibold px-2.5 py-1 rounded">0 шт</span>
+                            </div>
+                        </div>
+                        <button id="modalAddToCartBtn" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-3.5 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Добавить в корзину
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Модальное окно Корзины -->
     <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -122,7 +180,7 @@
                 </button>
             </div>
 
-            <!-- Список товаров -->
+            <!-- Список товаров в корзине -->
             <div id="cartItemsList" class="p-6 overflow-y-auto flex-grow divide-y divide-slate-100">
                 <!-- Сюда вставляются товары -->
             </div>
@@ -157,11 +215,14 @@
         let searchQuery = '';
         let cart = {};
 
+        // Состояние для слайдера в карточке товара
+        let activeModalImageIndex = 0;
+        let currentModalImages = [];
+
         // Загрузка данных из Google Таблицы
         async function loadProductsFromSheet() {
             const grid = document.getElementById('productGrid');
             
-            // Показываем индикатор загрузки
             grid.innerHTML = `
                 <div class="col-span-full text-center py-24">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800 mx-auto"></div>
@@ -173,7 +234,6 @@
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    // Фильтруем пустые строки и преобразуем в массив объектов для каталога
                     productsData = results.data
                         .filter(row => row['Наименование'] && row['Наименование'].trim() !== '')
                         .map((row, index) => {
@@ -253,7 +313,10 @@
                 const mainImage = hasImage ? p.images[0] : '';
                 
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group';
+                card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group cursor-pointer';
+                
+                // Клик на саму карточку открывает модальное окно деталей
+                card.onclick = () => openProductModal(p.id);
                 
                 let imageHTML = '';
                 if (hasImage) {
@@ -298,7 +361,8 @@
                             </div>
                         </div>
 
-                        <button onclick="addToCart(${p.id})" class="mt-4 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2.5 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm">
+                        <!-- Обязательный event.stopPropagation(), чтобы клик по кнопке не триггерил открытие модалки -->
+                        <button onclick="event.stopPropagation(); addToCart(${p.id})" class="mt-4 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2.5 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Добавить в корзину
                         </button>
@@ -306,6 +370,93 @@
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // Открытие карточки товара (Детальное модальное окно)
+        function openProductModal(id) {
+            const p = productsData.find(item => item.id === id);
+            if (!p) return;
+
+            const { title, tags } = parseName(p.fullName);
+            
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalGroup').innerText = p.group;
+            document.getElementById('modalPrice').innerText = `${p.price} ₽`;
+            
+            const stockSpan = document.getElementById('modalStock');
+            stockSpan.innerText = `${p.stock} шт`;
+            if (p.stock > 30) {
+                stockSpan.className = "text-xs font-semibold px-2.5 py-1 rounded bg-green-50 text-green-700";
+            } else {
+                stockSpan.className = "text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-700";
+            }
+
+            // Вывод характеристик
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = '';
+            tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = "bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md font-medium";
+                span.innerText = tag;
+                tagsContainer.appendChild(span);
+            });
+
+            // Настройка слайдера изображений
+            currentModalImages = p.images;
+            activeModalImageIndex = 0;
+            showModalImage();
+
+            // Кнопка добавления в корзину в модалке
+            const cartBtn = document.getElementById('modalAddToCartBtn');
+            cartBtn.onclick = () => {
+                addToCart(p.id);
+            };
+
+            // Показываем окно
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        // Показ картинки внутри слайдера модалки
+        function showModalImage() {
+            const container = document.getElementById('modalImageContainer');
+            const controls = document.getElementById('modalSliderControls');
+            container.innerHTML = '';
+            controls.innerHTML = '';
+            controls.classList.add('hidden');
+
+            if (currentModalImages && currentModalImages.length > 0) {
+                const img = document.createElement('img');
+                img.src = currentModalImages[activeModalImageIndex];
+                img.className = "w-full h-full object-cover max-h-[300px] md:max-h-[450px]";
+                container.appendChild(img);
+
+                // Если фото несколько, активируем слайдер
+                if (currentModalImages.length > 1) {
+                    controls.classList.remove('hidden');
+                    currentModalImages.forEach((_, idx) => {
+                        const dot = document.createElement('button');
+                        dot.className = `w-2.5 h-2.5 rounded-full transition ${idx === activeModalImageIndex ? 'bg-emerald-800 w-5' : 'bg-slate-300 hover:bg-slate-400'}`;
+                        dot.onclick = () => {
+                            activeModalImageIndex = idx;
+                            showModalImage();
+                        };
+                        controls.appendChild(dot);
+                    });
+                }
+            } else {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center text-emerald-600/60 p-4">
+                        <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800/50">Фото ожидается</span>
+                    </div>
+                `;
+            }
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
         }
 
         // Фильтрация
@@ -445,7 +596,8 @@
             if (platform === 'telegram') {
                 link = `https://t.me/share/url?url=&text=${encodedMessage}`;
             } else if (platform === 'whatsapp') {
-                link = `https://api.whatsapp.com/send?phone=79990000000&text=${encodedMessage}`;
+                // Изменено на указанный контактный телефон владельца
+                link = `https://api.whatsapp.com/send?phone=79785848434&text=${encodedMessage}`;
             }
 
             window.open(link, '_blank');
