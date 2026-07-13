@@ -167,9 +167,13 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Skip to content (для доступности) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-emerald-800 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg">
+        Перейти к содержанию
+    </a>
 
     <!-- Шапка / Навигация -->
-    <header class="bg-emerald-800 text-white sticky top-0 z-40 shadow-md">
+    <header class="bg-emerald-800 text-white sticky top-0 z-40 shadow-md" role="banner">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
             
             <!-- Блок логотипа и контактного телефона -->
