@@ -108,6 +108,17 @@
             animation: fadeInUp 0.5s ease-out forwards;
         }
         
+        /* Начальное состояние карточек для Intersection Observer */
+        .product-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         /* Skeleton loading */
         .skeleton {
             background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
@@ -500,11 +511,17 @@
         async function loadProductsFromSheet() {
             const grid = document.getElementById('productGrid');
             
-            grid.innerHTML = `
-                <div class="col-span-full text-center py-24">
-                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800 mx-auto"></div>
-                    <p class="mt-4 text-slate-500 font-medium">Загрузка каталога из Google Таблицы...</p>
-                </div>`;
+            // Показываем skeleton loading (6 карточек-заглушек)
+            grid.innerHTML = Array(6).fill(0).map(() => `
+                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+                    <div class="skeleton h-56 w-full"></div>
+                    <div class="p-5 space-y-3">
+                        <div class="skeleton h-5 w-3/4 rounded"></div>
+                        <div class="skeleton h-4 w-1/2 rounded"></div>
+                        <div class="skeleton h-8 w-full rounded-lg mt-4"></div>
+                    </div>
+                </div>
+            `).join('');
 
             Papa.parse(sheetCsvUrl, {
                 download: true,
@@ -666,6 +683,9 @@
                     </div>
                 `;
                 grid.appendChild(card);
+                
+                // Подключаем Intersection Observer для fade-in анимации
+                cardObserver.observe(card);
             });
         }
 
@@ -1023,6 +1043,26 @@
             
             renderProducts();
         }
+
+        // Intersection Observer для fade-in анимации карточек при скролле
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Добавляем задержку для каскадного эффекта
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 50);
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
         // Показ/скрытие кнопки "Наверх" при скролле
         window.addEventListener('scroll', () => {
