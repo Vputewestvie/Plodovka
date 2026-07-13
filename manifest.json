@@ -1,0 +1,21 @@
+{
+  "name": "Сад и Огород — Саженцы плодовых культур",
+  "short_name": "Сад и Огород",
+  "description": "Саженцы плодовых деревьев и ягодных культур в Севастополе. Жимолость, смородина, крыжовник, малина.",
+  "start_url": "/Plodovka/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#047857",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://vputewestvie.github.io/Plodovka/og-image.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "business"],
+  "lang": "ru",
+  "dir": "ltr"
+}
