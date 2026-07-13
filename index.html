@@ -250,6 +250,30 @@
         </div>
     </main>
 
+    <!-- Блок социального доказательства -->
+    <section class="bg-emerald-50/50 border-y border-emerald-100 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">500+</div>
+                    <div class="text-sm text-slate-600">Довольных клиентов</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">1000+</div>
+                    <div class="text-sm text-slate-600">Саженцев продано</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">4.9</div>
+                    <div class="text-sm text-slate-600">Средняя оценка</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">5 лет</div>
+                    <div class="text-sm text-slate-600">На рынке</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Блок "Почему выбирают нас" -->
     <section class="bg-white border-t border-slate-100 py-16">
         <div class="max-w-7xl mx-auto px-4">
@@ -637,7 +661,7 @@
                 if (hasImage) {
                     imageHTML = `
                         <div class="relative h-56 w-full overflow-hidden bg-slate-100">
-                            <img src="${mainImage}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <img src="${mainImage}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <span class="absolute top-3 left-3 bg-emerald-800 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">${p.group}</span>
                         </div>
                     `;
