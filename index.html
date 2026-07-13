@@ -3,633 +3,690 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Плодовый питомник</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Питомник Саженцев — Плодово-ягодные культуры</title>
+    <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        [x-cloak] { display: none !important; }
-        body { background: #FAF9F5; font-family: 'Inter', sans-serif; color: #1C352D; }
-        .spinner {
-            border: 3px solid #e2e0d9;
-            border-top: 3px solid #B48B5C;
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            animation: spin 0.9s linear infinite;
-            margin: 0 auto;
+        body {
+            font-family: 'Inter', sans-serif;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .toast {
-            position: fixed;
-            bottom: 96px;
-            left: 50%;
-            transform: translateX(-50%) translateY(8px);
-            background: #1C352D;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 48px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.18);
-            z-index: 200;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .modal-overlay { background: rgba(0,0,0,0.55); backdrop-filter: blur(4px); }
-        .plant-card { transition: transform 0.2s ease, box-shadow 0.25s ease; }
-        .plant-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(28,53,45,0.15); }
-        .image-placeholder svg { width: 72px; height: 72px; opacity: 0.25; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-<div x-data="catalogApp()" x-init="init()" @keydown.escape="closeModal(); comparisonOpen = false; isFullScreen = false" x-cloak>
-
-    <!-- HEADER -->
-    <header class="border-b border-[#5B7065]/20 py-5 px-4 bg-white/70 backdrop-blur-sm sticky top-0 z-30">
-        <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
-            <div>
-                <span class="text-[10px] uppercase tracking-[0.2em] text-[#B48B5C] font-semibold">Плодовый питомник</span>
-                <h1 class="font-serif text-2xl md:text-4xl text-[#1C352D] font-semibold leading-tight flex items-center gap-3 flex-wrap">
-                    Саженцы плодовых
-                    <span x-show="selectionList.length" class="text-sm font-sans font-normal text-[#B48B5C] bg-[#FAF9F5] px-3 py-0.5 rounded-full border border-[#B48B5C]/20">
-                        выбрано <span x-text="selectionList.length"></span>
-                    </span>
-                </h1>
+    <!-- Шапка / Навигация -->
+    <header class="bg-emerald-800 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <svg class="w-8 h-8 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Сад и Огород</h1>
+                    <p class="text-xs text-emerald-200">Лучшие саженцы плодово-ягодных культур</p>
+                </div>
             </div>
-            <div class="text-xs text-[#5B7065] max-w-[220px] text-right leading-relaxed">
-                Выберите саженцы и отправьте список в Авито
+
+            <!-- Поиск и Корзина -->
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+                <div class="relative flex-grow sm:flex-grow-0">
+                    <input type="text" id="searchInput" placeholder="Поиск сорта..." class="w-full sm:w-64 px-4 py-2 pr-10 rounded-full bg-emerald-900/50 border border-emerald-700 text-white placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
+                    <svg class="w-5 h-5 absolute right-3 top-2.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                
+                <button onclick="toggleCartModal()" class="relative bg-emerald-600 hover:bg-emerald-500 transition px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span>Корзина</span>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[1600px] mx-auto px-4 py-7">
-
-        <!-- LOADING -->
-        <div x-show="loading" class="text-center py-24">
-            <div class="spinner"></div>
-            <p class="mt-5 text-[#5B7065] text-sm font-medium">Загружаем каталог...</p>
+    <!-- Промо-блок (Hero) -->
+    <section class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white py-12 md:py-20 px-4 text-center">
+        <div class="max-w-3xl mx-auto">
+            <span class="bg-emerald-700/60 text-emerald-200 text-xs uppercase tracking-widest px-3 py-1.5 rounded-full font-semibold">Сезон посадки 2026</span>
+            <h2 class="text-3xl md:text-5xl font-extrabold mt-4 mb-4 leading-tight">Проверенные саженцы с гарантией сорта</h2>
+            <p class="text-emerald-100 text-base md:text-lg mb-8 max-w-xl mx-auto">Все растения поставляются с открытой корневой системой (ОКС), полностью адаптированы и готовы к высадке в вашем саду.</p>
+            <div class="flex flex-wrap justify-center gap-4 text-sm">
+                <span class="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> 100% приживаемость</span>
+                <span class="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Контроль качества</span>
+                <span class="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Бережная упаковка</span>
+            </div>
         </div>
+    </section>
 
-        <!-- ERROR -->
-        <div x-show="error" class="text-center py-20 text-red-600">
-            <p class="text-lg font-bold">⚠️ Не удалось загрузить каталог</p>
-            <p class="text-sm mt-1.5" x-text="errorMessage"></p>
-            <button @click="init()" class="mt-5 bg-[#1C352D] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#2a4a3d] transition">Повторить</button>
-        </div>
-
-        <!-- FILTERS + SORT -->
-        <div x-show="!loading && !error" class="bg-white rounded-3xl p-5 shadow-sm border border-[#5B7065]/10 mb-8">
-            <div class="flex flex-wrap items-center gap-4 justify-between">
-                <div class="flex flex-wrap gap-2">
-                    <template x-for="group in groups" :key="group">
-                        <button @click="activeGroup = group" :class="activeGroup === group ? 'bg-[#1C352D] text-white' : 'bg-[#FAF9F5] text-[#1C352D] hover:bg-[#e8e6df]'" class="px-4 py-2 rounded-full text-sm font-medium transition duration-200" x-text="group === 'all' ? 'Все' : group"></button>
-                    </template>
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <input type="text" x-model.debounce="searchQuery" placeholder="Поиск..." class="w-44 sm:w-52 bg-[#FAF9F5] rounded-full px-4 py-2 text-sm border border-[#5B7065]/20 focus:outline-none focus:border-[#B48B5C] transition">
-                    <select x-model="sortBy" class="bg-[#FAF9F5] rounded-full px-4 py-2 text-sm border border-[#5B7065]/20 focus:outline-none focus:border-[#B48B5C] transition cursor-pointer">
-                        <option value="group">По группам</option>
-                        <option value="price-asc">Цена ↑</option>
-                        <option value="price-desc">Цена ↓</option>
-                        <option value="name-asc">Название А–Я</option>
-                        <option value="stock">Сначала в наличии</option>
-                    </select>
-                    <label class="flex items-center gap-2 text-sm font-medium text-[#1C352D] cursor-pointer select-none">
-                        <input type="checkbox" x-model="onlyInStock" class="w-4 h-4 accent-[#B48B5C]">
-                        В наличии
-                    </label>
-                </div>
+    <!-- Главная часть: Фильтры и Список товаров -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <!-- Фильтры по категориям -->
+        <div class="mb-8 overflow-x-auto pb-2 scrollbar-none">
+            <div class="flex gap-2 min-w-max" id="categoryFilters">
+                <button onclick="filterCategory('Все')" class="category-btn active px-5 py-2.5 rounded-full text-sm font-medium transition bg-emerald-800 text-white shadow-sm">Все культуры</button>
+                <button onclick="filterCategory('Жимолость')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Жимолость</button>
+                <button onclick="filterCategory('Смородина')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Смородина</button>
+                <button onclick="filterCategory('Крыжовник')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Крыжовник</button>
+                <button onclick="filterCategory('Малина')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Малина</button>
             </div>
         </div>
 
-        <!-- CARDS -->
-        <div x-show="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pb-28">
-            <template x-for="plant in sortedPlants" :key="plant.id">
-                <div class="plant-card bg-white rounded-3xl border border-[#5B7065]/10 shadow-sm overflow-hidden flex flex-col">
+        <!-- Каталог саженцев -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Карточки генерируются скриптом ниже -->
+        </div>
 
-                    <div class="relative aspect-[4/3] bg-[#FAF9F5] cursor-pointer overflow-hidden group" @click="openModal(plant)">
-                        <template x-if="plant.media && plant.media.length">
-                            <img :src="plant.media[0]" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition duration-500">
-                        </template>
-                        <template x-if="!plant.media || !plant.media.length">
-                            <div class="w-full h-full flex items-center justify-center image-placeholder">
-                                <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="6" y="10" width="68" height="56" rx="8" stroke="#5B7065" stroke-width="2.5" stroke-dasharray="4 4"/>
-                                    <circle cx="28" cy="28" r="8" stroke="#5B7065" stroke-width="2.5"/>
-                                    <path d="M74 58L54 38L36 54L22 42L6 58" stroke="#5B7065" stroke-width="2.5" stroke-linejoin="round"/>
-                                    <path d="M54 38L64 28L74 38" stroke="#5B7065" stroke-width="2.5" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </template>
-                        <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] uppercase font-semibold text-[#B48B5C] shadow-sm" x-text="plant.group"></div>
-                        <div class="absolute top-3 right-3">
-                            <span :class="plant.stock > 0 ? 'bg-emerald-600' : 'bg-rose-600'" class="text-white px-3 py-1 rounded-full text-[10px] uppercase font-bold shadow-sm" x-text="plant.stock > 0 ? 'В наличии' : 'Нет'"></span>
-                        </div>
-                    </div>
-
-                    <div class="p-5 flex flex-col flex-1">
-                        <h3 class="font-serif text-xl font-bold text-[#1C352D] cursor-pointer hover:text-[#B48B5C] transition" @click="openModal(plant)" x-text="plant.title"></h3>
-                        <div class="mt-2 flex flex-wrap gap-1.5 text-xs text-[#5B7065]">
-                            <template x-for="(item, idx) in Object.entries(plant.details || {}).slice(0, 3)" :key="idx">
-                                <span class="bg-[#FAF9F5] px-2 py-0.5 rounded-full" x-text="item[1]"></span>
-                            </template>
-                        </div>
-                        <div class="mt-auto pt-4 flex items-center justify-between">
-                            <span class="text-2xl font-bold text-[#1C352D]" x-text="plant.price + ' ₽'"></span>
-                            <div class="flex gap-2">
-                                <button @click="toggleComparison(plant)" :class="isInComparison(plant) ? 'bg-[#B48B5C] text-white' : 'bg-[#FAF9F5] text-[#1C352D] hover:bg-[#e8e6df]'" class="w-10 h-10 rounded-xl text-sm transition flex items-center justify-center" title="Сравнить">⚖️</button>
-                                <button @click="toggleSelection(plant)" :class="isSelected(plant) ? 'bg-[#1C352D] text-white' : 'border-2 border-[#1C352D] text-[#1C352D] hover:bg-[#1C352D] hover:text-white'" class="px-4 py-2 rounded-xl text-sm font-semibold transition" x-text="isSelected(plant) ? 'В корзине' : 'Выбрать'"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <div x-show="!sortedPlants.length" class="col-span-full text-center py-16 text-[#5B7065]">
-                <p class="text-xl font-medium">Ничего не найдено</p>
-                <p class="text-sm mt-1">Попробуйте изменить фильтры</p>
-            </div>
+        <!-- Сообщение, если ничего не найдено -->
+        <div id="notFoundMessage" class="hidden text-center py-16">
+            <svg class="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <p class="text-slate-500 text-lg font-medium">Ничего не найдено по вашему запросу</p>
         </div>
     </main>
 
-    <!-- MODAL -->
-    <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" @click.away="closeModal()">
-        <div class="flex items-center justify-center min-h-screen px-4 py-8">
-            <div class="modal-overlay fixed inset-0" @click="closeModal()"></div>
-            <div class="bg-white rounded-3xl max-w-5xl w-full relative z-10 shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[96vh]">
-                <button @click="closeModal()" class="absolute top-4 right-4 bg-white/90 hover:bg-gray-100 p-2.5 rounded-full shadow-md z-20 text-[#1C352D] font-bold text-xl transition">✕</button>
+    <!-- Футер -->
+    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-white font-semibold text-lg mb-4">Питомник «Плодовка»</h3>
+                <p class="text-sm leading-relaxed">Мы выращиваем районированные сорта ягодных кустарников с отличными вкусовыми качествами и высокой урожайностью.</p>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold text-lg mb-4">Контакты и заказ</h3>
+                <p class="text-sm mb-2">📍 Самовывоз из питомника или доставка ТК</p>
+                <p class="text-sm mb-2">📞 Телефон: +7 (999) 000-00-00</p>
+                <p class="text-sm">💬 Пишите в мессенджерах для консультаций</p>
+            </div>
+            <div>
+                <h3 class="text-white font-semibold text-lg mb-4">Правила заказа</h3>
+                <p class="text-sm leading-relaxed">Выберите интересующие сорта в каталоге, добавьте их в корзину и отправьте сформированный список менеджеру для подтверждения наличия.</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
+            © 2026 Питомник саженцев «Плодовка». Все права защищены.
+        </div>
+    </footer>
 
-                <div class="md:w-1/2 bg-[#FAF9F5] p-6 flex flex-col justify-center">
-                    <div class="relative aspect-square bg-white rounded-2xl overflow-hidden shadow-inner border border-[#5B7065]/10 cursor-zoom-in group" @click="openFullScreen()">
-                        <template x-if="currentPlant.media && currentPlant.media.length">
-                            <template x-for="(photo, idx) in currentPlant.media" :key="idx">
-                                <img :src="photo" x-show="activePhotoIndex === idx" class="w-full h-full object-contain transition-opacity duration-300">
-                            </template>
-                        </template>
-                        <template x-if="!currentPlant.media || !currentPlant.media.length">
-                            <div class="w-full h-full flex items-center justify-center image-placeholder">
-                                <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-24 h-24">
-                                    <rect x="6" y="10" width="68" height="56" rx="8" stroke="#5B7065" stroke-width="2.5" stroke-dasharray="4 4"/>
-                                    <circle cx="28" cy="28" r="8" stroke="#5B7065" stroke-width="2.5"/>
-                                    <path d="M74 58L54 38L36 54L22 42L6 58" stroke="#5B7065" stroke-width="2.5" stroke-linejoin="round"/>
-                                    <path d="M54 38L64 28L74 38" stroke="#5B7065" stroke-width="2.5" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </template>
-                        <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition flex items-center justify-center pointer-events-none">
-                            <span class="bg-black/60 text-white text-sm px-5 py-2.5 rounded-full backdrop-blur-sm shadow-lg">🔍 Увеличить</span>
-                        </div>
-                    </div>
-                    <div x-show="currentPlant.media && currentPlant.media.length > 1" class="flex gap-2 mt-4 overflow-x-auto hide-scrollbar pb-1.5">
-                        <template x-for="(photo, idx) in currentPlant.media" :key="idx">
-                            <img :src="photo" @click="activePhotoIndex = idx" class="w-14 h-14 object-cover rounded-lg cursor-pointer border-2 transition" :class="activePhotoIndex === idx ? 'border-[#B48B5C]' : 'border-transparent opacity-50 hover:opacity-100'">
-                        </template>
-                    </div>
+    <!-- Модальное окно Корзины -->
+    <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Заголовок -->
+            <div class="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    Ваш заказ
+                </h3>
+                <button onclick="toggleCartModal()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Список товаров -->
+            <div id="cartItemsList" class="p-6 overflow-y-auto flex-grow divide-y divide-slate-100">
+                <!-- Сюда вставляются товары -->
+            </div>
+
+            <!-- Итоги и форма -->
+            <div class="p-6 bg-slate-50 border-t border-slate-100 space-y-4">
+                <div class="flex justify-between items-center font-bold text-lg text-slate-900">
+                    <span>Итого к оплате:</span>
+                    <span id="cartTotalSum">0 ₽</span>
                 </div>
-
-                <div class="md:w-1/2 p-8 overflow-y-auto max-h-[80vh] md:max-h-[96vh]">
-                    <span class="text-xs uppercase tracking-wider text-[#B48B5C] font-semibold" x-text="currentPlant.group"></span>
-                    <h2 class="font-serif text-3xl font-bold text-[#1C352D] mt-1 leading-tight" x-text="currentPlant.title"></h2>
-
-                    <div class="mt-5 space-y-3 text-sm">
-                        <template x-for="(item, idx) in Object.entries(currentPlant.details || {})" :key="idx">
-                            <div class="flex border-b border-[#5B7065]/10 py-2.5">
-                                <span class="font-semibold text-[#5B7065] w-28 flex-shrink-0 capitalize" x-text="item[0] + ':'"></span>
-                                <span class="text-[#1C352D]" x-text="item[1]"></span>
-                            </div>
-                        </template>
-                    </div>
-
-                    <div class="mt-7 bg-[#FAF9F5] p-5 rounded-2xl border border-[#5B7065]/10">
-                        <h4 class="text-xs uppercase font-bold text-[#B48B5C] tracking-wider">🌿 Рекомендации по уходу</h4>
-                        <div class="mt-3 text-sm space-y-1.5">
-                            <div><span class="font-semibold text-[#5B7065]">Свет:</span> <span x-text="getCare(currentPlant.group).light"></span></div>
-                            <div><span class="font-semibold text-[#5B7065]">Полив:</span> <span x-text="getCare(currentPlant.group).water"></span></div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 pt-6 border-t border-[#5B7065]/15 flex items-center justify-between gap-4 flex-wrap">
-                        <span class="text-3xl font-bold text-[#1C352D]" x-text="currentPlant.price + ' ₽'"></span>
-                        <button @click="toggleSelection(currentPlant)" :class="isSelected(currentPlant) ? 'bg-[#B48B5C]' : 'bg-[#1C352D] hover:bg-[#2a4a3d]'" class="text-white px-8 py-3.5 rounded-xl font-bold transition shadow-lg hover:shadow-xl active:scale-95" x-text="isSelected(currentPlant) ? 'В списке' : 'Выбрать'"></button>
-                    </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="sendOrder('telegram')" class="bg-[#229ED9] hover:bg-[#208fca] text-white py-3 px-4 rounded-xl font-medium transition text-sm flex items-center justify-center gap-2">
+                        Отправить в Telegram
+                    </button>
+                    <button onclick="sendOrder('whatsapp')" class="bg-[#25D366] hover:bg-[#20ba56] text-white py-3 px-4 rounded-xl font-medium transition text-sm flex items-center justify-center gap-2">
+                        Отправить в WhatsApp
+                    </button>
                 </div>
+                <p class="text-center text-[11px] text-slate-400">Нажимая кнопку, вы перейдете в мессенджер с автоматически сформированным текстом заказа.</p>
             </div>
         </div>
     </div>
 
-    <!-- FULLSCREEN -->
-    <div x-show="isFullScreen" x-cloak class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" @click.away="isFullScreen = false">
-        <button @click="isFullScreen = false" class="absolute top-6 right-6 text-white/80 hover:text-white text-4xl z-10 transition">✕</button>
-        <template x-if="currentPlant.media && currentPlant.media.length">
-            <template x-for="(photo, idx) in currentPlant.media" :key="idx">
-                <img :src="photo" x-show="activePhotoIndex === idx" class="max-h-[92vh] max-w-[92vw] object-contain select-none">
-            </template>
-        </template>
-        <button x-show="currentPlant.media && currentPlant.media.length > 1" @click="prevPhoto()" class="absolute left-4 text-white text-4xl bg-black/40 hover:bg-black/60 w-12 h-16 rounded-2xl flex items-center justify-center transition backdrop-blur-sm">‹</button>
-        <button x-show="currentPlant.media && currentPlant.media.length > 1" @click="nextPhoto()" class="absolute right-4 text-white text-4xl bg-black/40 hover:bg-black/60 w-12 h-16 rounded-2xl flex items-center justify-center transition backdrop-blur-sm">›</button>
-        <div x-show="currentPlant.media && currentPlant.media.length > 1" class="absolute bottom-6 text-white/60 text-sm font-medium" x-text="`${activePhotoIndex+1} / ${currentPlant.media.length}`"></div>
-    </div>
+    <!-- JavaScript-логика работы сайта -->
+    <script>
+        // База данных саженцев, полностью основанная на вашей таблице "Плодовка"
+        const productsData = [
+            {
+                id: 1,
+                fullName: "Жимолость Индиго Джем — сладкая канадская жимолость | ягоды без горечи | урожай до 4,5 кг частично самоплодный ОКС 1 год",
+                group: "Жимолость",
+                price: 200,
+                stock: 25,
+                images: [
+                    "https://res.cloudinary.com/aiuuclgs/image/upload/v1783857986/%D0%98%D0%BD%D0%B4%D0%B8%D0%B3%D0%BE_%D0%B4%D0%B6%D0%B5%D0%BC1_ohhgqh.png",
+                    "https://res.cloudinary.com/aiuuclgs/image/upload/v1783857852/%D0%98%D0%BD%D0%B4%D0%B8%D0%B3%D0%BE_%D0%B4%D0%B6%D0%B5%D0%BC_zp7tv1.jpg"
+                ]
+            },
+            {
+                id: 2,
+                fullName: "Смородина белая Снежана — прозрачные сладкие ягоды | компактный куст | дружное созревание 1-летка ОКС средняя малорослая",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 3,
+                fullName: "Смородина красная Ранняя Сладкая — ранний урожай сладких ягод | самоплодная | морозостойкая 1-летка ОКС среднерослая",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 4,
+                fullName: "Смородина красная Роза Чаир — нежно-розовые сладкие ягоды | компактный куст | стабильный урожай 1-летка ОКС средняя | Цвет ягод: розово-рубиновый",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 5,
+                fullName: "Смородина красная Ролан — поздний высокоурожайный сорт | длинные кисти до 30 ягод | стабильный урожай 1-летка ОКС высокий",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 6,
+                fullName: "Крыжовник «Командор» (Владил) — бесшипный сорт с бордово-рубиновыми ягодами | 2,5–6,5 г | высота 120–150 см | среднеранний ОКС 1 год",
+                group: "Крыжовник",
+                price: 200,
+                stock: 75,
+                images: []
+            },
+            {
+                id: 7,
+                fullName: "Крыжовник «Консул» — бесшипный сорт мощный зимостойкий сорт с тёмно-рубиновыми ягодами | куст 180–200 × 150–180 см | ягоды 3,3–6,5 г | средний срок созревания 1-летка ОКС",
+                group: "Крыжовник",
+                price: 200,
+                stock: 75,
+                images: []
+            },
+            {
+                id: 8,
+                fullName: "Крыжовник «Хиннонмаки Зелёный» — финский десертный сорт с крупными изумрудными ягодами | куст 90–120 × 100–130 см | ягоды 4–6 г | ранний срок созревания 1-летка ОКС",
+                group: "Крыжовник",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 9,
+                fullName: "Жимолость Хоней Би — медово-сладкая, урожайная, лучший опылитель | ягоды до 3 г | Медовая пчелка 1-летка ОКС частично самоплодная саженец",
+                group: "Жимолость",
+                price: 200,
+                stock: 25,
+                images: [
+                    "https://res.cloudinary.com/aiuuclgs/image/upload/v1783860324/%D0%A5%D0%BE%D0%BD%D0%B5%D0%B9_%D0%B1%D0%B81_aai6x9.png",
+                    "https://res.cloudinary.com/aiuuclgs/image/upload/v1783858139/%D0%A5%D0%BE%D0%BD%D0%B5%D0%B9_%D0%B1%D0%B8_mfunzh.jpg"
+                ]
+            },
+            {
+                id: 10,
+                fullName: "Крыжовник «Краснославянский» — десертный сорт с тёмно-вишнёвыми ягодами и эталонным вкусом | куст 100–150 × 100–130 см | ягоды 3,9–6 г | средний срок созревания 1-летка ОКС",
+                group: "Крыжовник",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 11,
+                fullName: "Крыжовник «Куршу Дзинтарс» — янтарно-медовый десертный сорт с очень сладкими ягодами | куст 100–120 × 100–120 см | ягоды 2,7–5 г | среднеранний срок созревания 1-летка ОКС",
+                group: "Крыжовник",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 12,
+                fullName: "Крыжовник «Малахит» — легендарный зелёноплодный сорт с крупными изумрудными ягодами | куст 130–150 × 140–180 см | ягоды 4–7 г | среднеранний срок созревания 1-летка ОКС",
+                group: "Крыжовник",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 13,
+                fullName: "Крыжовник «Олави» — финский морозостойкий сорт с тёмно-вишнёвыми ягодами и рекордной урожайностью | куст 120–150 × 120–140 см | ягоды 3,7–4,4 г | среднепоздний срок созревания 1-летка ОКС",
+                group: "Крыжовник",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 14,
+                fullName: "Малина ремонтантная Аделита — крупноплодная, сладкая, урожайная | ягоды до 16 г | плодоношение до заморозков ОКС 1 год",
+                group: "Малина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 15,
+                fullName: "Малина ремонтантная Красная Гвардия — сверхкрупная, сладкая, урожайная | ягоды до 18 г | плодоношение до заморозков 1-летка ОКС",
+                group: "Малина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 16,
+                fullName: "Малина ремонтантная Осенняя Красавица — сладкая, урожайная, компактная | плодоношение до заморозков | урожай до 7 кг 1-летка ОКС",
+                group: "Малина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 17,
+                fullName: "Малина черноплодная Блэк Джевел — экзотическая, сладкая, ароматная | черные ягоды | урожай до 4 кг 1-летка ОКС",
+                group: "Малина",
+                price: 250,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 18,
+                fullName: "Малиновое дерево Сказка — бесшипная, сверхурожайная, крупноплодная | ягоды до 20 г | до 10 кг с куста 1-летка ОКС",
+                group: "Малина",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 19,
+                fullName: "Малиновое дерево Таруса — крупноплодная, бесшипная, урожайная | ягоды до 16 г | штамбовый сорт 1-летка ОКС",
+                group: "Малина",
+                price: 200,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 20,
+                fullName: "Смородина белая Фея — нежные прозрачные ягоды | урожайная, сладкая, зимостойкая 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 21,
+                fullName: "Смородина золотистая Лёвушка — медово-цветущая, урожайная, засухоустойчивая | ягоды до 2,6 г | мощный куст 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 22,
+                fullName: "Жимолость Бакчарский Великан — гигантские ягоды до 5 см | сладкая, урожайная, морозостойкая, 1-летка ОКС частично самоплодная саженец",
+                group: "Жимолость",
+                price: 200,
+                stock: 25,
+                images: [
+                    "https://res.cloudinary.com/aiuuclgs/image/upload/v1783860331/%D0%91%D0%B0%D0%BA%D1%87%D0%B0%D1%80%D1%81%D0%BA%D0%B8%D0%B9_%D0%92%D0%B5%D0%BB%D0%B8%D0%BA%D0%B0%D0%BD1_qw96hd.png",
+                    "https://res.cloudinary.com/aiuuclgs/image/upload/v1783860325/%D0%91%D0%B0%D0%BA%D1%87%D0%B0%D1%80%D1%81%D0%BA%D0%B8%D0%B9_%D0%92%D0%B5%D0%BB%D0%B8%D0%BA%D0%B0%D0%BD_opdirg.jpg"
+                ]
+            },
+            {
+                id: 23,
+                fullName: "Малина ремонтантная Джоан Джей — бесшипная, сверхурожайная, сладкая | ягоды до 12 г | плодоношение до заморозков ОКС 1 год",
+                group: "Малина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 24,
+                fullName: "Малина ремонтантная Маравилла — сверхкрупная, плотная, урожайная | ягоды до 15 г | длительное плодоношение ОКС 1 год",
+                group: "Малина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 25,
+                fullName: "Смородина чёрная Зелёная Дымка — ароматная мускатная ягода | среднерослая | урожайная 1-летка ОКС средняя ароматная не высокая",
+                group: "Смородина",
+                price: 150,
+                stock: 50,
+                images: []
+            },
+            {
+                id: 26,
+                fullName: "Смородина чёрная Селеченская 2 — ранняя крупноплодная ягода | сладкая, ароматная, урожайная 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 100,
+                images: []
+            },
+            {
+                id: 27,
+                fullName: "Смородина чёрная Пигмей — гигантские сладкие ягоды до 7,7 г | ароматная, урожайная, десертная 1-летка ОКС средняя",
+                group: "Смородина",
+                price: 150,
+                stock: 100,
+                images: []
+            },
+            {
+                id: 28,
+                fullName: "Смородина чёрная Багира — сладкая, ароматная, жаростойкая | крупные ягоды | урожай до 4,5 кг 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 50,
+                images: []
+            },
+            {
+                id: 29,
+                fullName: "Смородина чёрная Бинар — ароматная, зимостойкая, урожайная | сладко-кислые ягоды | надёжный сорт 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 30,
+                fullName: "Смородина чёрная Лентяй — поздняя, сладкая, крупноплодная | ягоды до 3,3 г | урожай в августе 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 31,
+                fullName: "Смородина чёрная Орловская Серенада — ароматная, урожайная, зимостойкая | сладко-кислые ягоды | длительное плодоношение 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 32,
+                fullName: "Смородина чёрная Тисель — ранняя, крупноплодная, сладкая | ягоды до 5,5 г | урожай до 5 кг 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            },
+            {
+                id: 33,
+                fullName: "Смородина чёрная Тихоуп — сверхурожайная, крупноплодная, витаминная | урожай до 8 кг | польская селекция 1-летка ОКС",
+                group: "Смородина",
+                price: 150,
+                stock: 25,
+                images: []
+            }
+        ];
 
-    <!-- COMPARE BAR -->
-    <div x-show="comparisonList.length > 0" x-cloak class="fixed bottom-28 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#B48B5C]/30 px-5 py-3 flex items-center gap-5 z-40">
-        <span class="font-bold text-[#1C352D] text-sm flex items-center gap-2">⚖️ Сравнение: <span x-text="comparisonList.length"></span></span>
-        <button @click="comparisonOpen = true" class="bg-[#B48B5C] text-white px-5 py-2 rounded-xl text-xs font-bold transition hover:bg-[#a0784a]">Сравнить</button>
-        <button @click="comparisonList = []" class="text-xs text-gray-400 hover:text-red-500 font-bold uppercase tracking-wider transition">Очистить</button>
-    </div>
+        let currentCategory = 'Все';
+        let searchQuery = '';
+        let cart = {};
 
-    <!-- COMPARE MODAL -->
-    <div x-show="comparisonOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="comparisonOpen = false"></div>
-            <div class="bg-white rounded-3xl p-8 max-w-6xl w-full relative z-10 max-h-[90vh] overflow-auto shadow-2xl">
-                <button @click="comparisonOpen = false" class="absolute top-5 right-5 bg-gray-100 hover:bg-gray-200 w-10 h-10 rounded-full text-xl font-bold transition">✕</button>
-                <h3 class="font-serif text-3xl font-bold mb-6 text-[#1C352D]">Сравнение саженцев</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[500px]">
-                        <thead>
-                            <tr class="border-b-2 border-[#5B7065]/20">
-                                <th class="py-4 font-bold text-gray-400 text-xs uppercase w-1/5">Параметр</th>
-                                <template x-for="item in comparisonList" :key="item.id">
-                                    <th class="py-4 px-5 font-serif text-xl text-[#1C352D] font-bold" x-text="item.title"></th>
-                                </template>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm text-[#1C352D]">
-                            <tr class="border-b border-[#5B7065]/10">
-                                <td class="py-4 font-bold text-gray-400 text-xs uppercase">Фото</td>
-                                <template x-for="item in comparisonList" :key="item.id">
-                                    <td class="py-4 px-5">
-                                        <img :src="item.media && item.media.length ? item.media[0] : ''" class="w-28 h-28 object-cover rounded-2xl shadow-sm" :alt="item.title">
-                                    </td>
-                                </template>
-                            </tr>
-                            <tr class="border-b border-[#5B7065]/10">
-                                <td class="py-4 font-bold text-gray-400 text-xs uppercase">Группа</td>
-                                <template x-for="item in comparisonList" :key="item.id">
-                                    <td class="py-4 px-5 font-bold text-[#B48B5C] uppercase tracking-wide" x-text="item.group"></td>
-                                </template>
-                            </tr>
-                            <tr class="border-b border-[#5B7065]/10">
-                                <td class="py-4 font-bold text-gray-400 text-xs uppercase">Цена</td>
-                                <template x-for="item in comparisonList" :key="item.id">
-                                    <td class="py-4 px-5 font-bold text-xl" x-text="item.price + ' ₽'"></td>
-                                </template>
-                            </tr>
-                            <tr x-show="comparisonList.length && comparisonList[0].details">
-                                <td class="py-4 font-bold text-gray-400 text-xs uppercase">Детали</td>
-                                <template x-for="item in comparisonList" :key="item.id">
-                                    <td class="py-4 px-5 text-xs space-y-0.5">
-                                        <template x-for="(entry, idx) in Object.entries(item.details || {}).slice(0, 4)" :key="idx">
-                                            <div><span class="font-semibold text-[#5B7065]" x-text="entry[0]+':'"></span> <span x-text="entry[1]"></span></div>
-                                        </template>
-                                    </td>
-                                </template>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+        // Функция парсинга сложной строки наименования в структурированный вид
+        function parseName(fullName) {
+            let title = fullName;
+            let tags = [];
+            
+            if (fullName.includes('—')) {
+                const parts = fullName.split('—');
+                title = parts[0].trim();
+                const descriptionPart = parts.slice(1).join('—');
+                tags = descriptionPart.split('|').map(t => t.trim()).filter(Boolean);
+            } else if (fullName.includes('|')) {
+                const parts = fullName.split('|');
+                title = parts[0].trim();
+                tags = parts.slice(1).map(t => t.trim()).filter(Boolean);
+            }
+            return { title, tags };
+        }
 
-    <!-- CART -->
-    <div x-show="selectionList.length > 0" x-cloak class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1C352D] text-white rounded-full shadow-2xl px-6 py-3 flex items-center gap-5 z-40 max-w-2xl w-11/12">
-        <div class="flex items-center gap-3 flex-1 min-w-0">
-            <span class="text-xs uppercase opacity-75 whitespace-nowrap">Выбрано: <span x-text="selectionList.length"></span></span>
-            <span class="text-lg font-bold whitespace-nowrap" x-text="calculateTotal() + ' ₽'"></span>
-        </div>
-        <div class="flex items-center gap-3">
-            <button @click="clearSelection()" class="text-xs text-white/70 hover:text-red-300 font-bold uppercase tracking-wider transition">Очистить</button>
-            <button @click="copyForAvito()" class="bg-[#B48B5C] hover:bg-[#a0784a] px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-lg hover:shadow-xl active:scale-95">В Авито</button>
-        </div>
-    </div>
+        // Рендеринг карточек товаров
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const notFound = document.getElementById('notFoundMessage');
+            grid.innerHTML = '';
 
-    <!-- TOAST -->
-    <div class="toast" :class="toastMessage ? 'show' : ''" x-text="toastMessage"></div>
+            const filtered = productsData.filter(p => {
+                const matchesCategory = (currentCategory === 'Все' || p.group === currentCategory);
+                const parsed = parseName(p.fullName);
+                const matchesSearch = parsed.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.group.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      parsed.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+                return matchesCategory && matchesSearch;
+            });
 
-</div>
+            if (filtered.length === 0) {
+                notFound.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            } else {
+                notFound.classList.add('hidden');
+                grid.classList.remove('hidden');
+            }
 
-<!-- ====== РЕГИСТРАЦИЯ КОМПОНЕНТА ДО ЗАГРУЗКИ ALPINE ====== -->
-<script>
-    // Регистрируем компонент до того, как Alpine начнёт обработку DOM
-    document.addEventListener('alpine:init', function() {
-        console.log('alpine:init fired – registering catalogApp');
-        Alpine.data('catalogApp', function() {
-            console.log('catalogApp component created');
-            return {
-                // STATE
-                plants: [],
-                groups: ['all'],
-                activeGroup: 'all',
-                searchQuery: '',
-                onlyInStock: false,
-                sortBy: 'group',
-                loading: true,
-                error: false,
-                errorMessage: '',
-                selectionList: [],
-                comparisonList: [],
-                modalOpen: false,
-                currentPlant: { media: [], title: '', group: '', details: {} },
-                activePhotoIndex: 0,
-                comparisonOpen: false,
-                isFullScreen: false,
-                toastMessage: '',
-                toastTimer: null,
-
-                // INIT
-                async init() {
-                    console.log('catalogApp init() called');
-                    this.restoreStorage();
-                    await this.loadData();
-                },
-
-                // LOAD DATA
-                async loadData() {
-                    try {
-                        const SHEET_ID = '1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk';
-                        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-                        const resp = await fetch(url);
-                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                        const csv = await resp.text();
-                        const parsed = this.parseCSV(csv);
-                        if (!parsed || parsed.length < 2) throw new Error('Нет данных');
-
-                        const headers = parsed[0].map(h => h.trim().toLowerCase());
-                        const rows = parsed.slice(1);
-
-                        const titleIdx = this.findHeader(headers, ['название', 'сорт', 'наименование']);
-                        const priceIdx = this.findHeader(headers, ['цена', 'стоимость']);
-                        const stockIdx = this.findHeader(headers, ['наличие', 'количество', 'остаток']);
-                        const groupIdx = this.findHeader(headers, ['группа', 'тип', 'вид', 'категория']);
-                        const photoIdx = this.findHeader(headers, ['фото', 'ссылка', 'image', 'картинка']);
-
-                        this.plants = rows.map((row, i) => {
-                            const get = (idx) => (idx >= 0 && idx < row.length) ? row[idx].trim() : '';
-                            const title = get(titleIdx) || `Саженец ${i + 1}`;
-                            let media = [];
-                            if (photoIdx >= 0 && get(photoIdx)) {
-                                const raw = get(photoIdx);
-                                const urls = raw.split(/[|,;\n]+/).map(u => u.trim()).filter(u => u.startsWith('http'));
-                                media = urls;
-                            }
-                            const details = {};
-                            const skipKeys = ['название', 'сорт', 'наименование', 'цена', 'стоимость',
-                                'наличие', 'количество', 'остаток', 'группа', 'тип', 'вид', 'категория',
-                                'фото', 'ссылка', 'image', 'картинка'
-                            ];
-                            headers.forEach((h, idx) => {
-                                const val = get(idx);
-                                if (val && !skipKeys.some(k => h.includes(k))) {
-                                    details[h] = val;
-                                }
-                            });
-                            return {
-                                id: i,
-                                title: title,
-                                price: Number(get(priceIdx)) || 0,
-                                stock: Number(get(stockIdx)) || 0,
-                                group: get(groupIdx) ? get(groupIdx).toLowerCase() : 'другое',
-                                media: media,
-                                details: details
-                            };
-                        }).filter(p => p.title && p.title.length > 0);
-
-                        this.groups = ['all', ...new Set(this.plants.map(p => p.group))];
-                        this.loading = false;
-                        console.log('✅ Loaded', this.plants.length, 'plants');
-                    } catch (err) {
-                        console.error('Load error:', err);
-                        this.error = true;
-                        this.errorMessage = err.message || 'Ошибка загрузки данных';
-                        this.loading = false;
-                    }
-
-                    this.selectionList = this.selectionList.filter(s => this.plants.some(p => p.id === s.id));
-                    this.comparisonList = this.comparisonList.filter(s => this.plants.some(p => p.id === s.id));
-                    this.saveStorage();
-                },
-
-                // CSV PARSER
-                parseCSV(text) {
-                    const lines = [];
-                    let current = [];
-                    let field = '';
-                    let inside = false;
-                    for (let i = 0; i < text.length; i++) {
-                        const ch = text[i];
-                        if (inside) {
-                            if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
-                            else if (ch === '"') { inside = false; }
-                            else { field += ch; }
-                        } else {
-                            if (ch === '"') { inside = true; }
-                            else if (ch === ',') { current.push(field.trim()); field = ''; }
-                            else if (ch === '\n' || ch === '\r') {
-                                if (field || current.length) {
-                                    current.push(field.trim());
-                                    if (current.some(c => c.length > 0)) lines.push(current);
-                                    current = [];
-                                    field = '';
-                                }
-                                if (ch === '\r' && text[i + 1] === '\n') i++;
-                            } else {
-                                field += ch;
-                            }
-                        }
-                    }
-                    if (field || current.length) {
-                        current.push(field.trim());
-                        if (current.some(c => c.length > 0)) lines.push(current);
-                    }
-                    return lines.length ? lines : [];
-                },
-
-                findHeader(headers, candidates) {
-                    for (let c of candidates) {
-                        const idx = headers.findIndex(h => h.includes(c));
-                        if (idx >= 0) return idx;
-                    }
-                    return -1;
-                },
-
-                // STORAGE
-                restoreStorage() {
-                    try {
-                        const sel = JSON.parse(localStorage.getItem('fruit_selection') || '[]');
-                        const comp = JSON.parse(localStorage.getItem('fruit_comparison') || '[]');
-                        if (Array.isArray(sel)) this.selectionList = sel;
-                        if (Array.isArray(comp)) this.comparisonList = comp;
-                    } catch (_) {}
-                },
-
-                saveStorage() {
-                    try {
-                        localStorage.setItem('fruit_selection', JSON.stringify(this.selectionList));
-                        localStorage.setItem('fruit_comparison', JSON.stringify(this.comparisonList));
-                    } catch (_) {}
-                },
-
-                // FILTERS
-                get filteredPlants() {
-                    return this.plants.filter(p => {
-                        const matchGroup = this.activeGroup === 'all' || p.group === this.activeGroup;
-                        const matchStock = !this.onlyInStock || p.stock > 0;
-                        const matchSearch = p.title.toLowerCase().includes(this.searchQuery.toLowerCase());
-                        return matchGroup && matchStock && matchSearch;
-                    });
-                },
-
-                get sortedPlants() {
-                    const list = [...this.filteredPlants];
-                    switch (this.sortBy) {
-                        case 'group':
-                            return list.sort((a, b) => a.group.localeCompare(b.group) || a.title.localeCompare(b.title));
-                        case 'price-asc':
-                            return list.sort((a, b) => a.price - b.price);
-                        case 'price-desc':
-                            return list.sort((a, b) => b.price - a.price);
-                        case 'name-asc':
-                            return list.sort((a, b) => a.title.localeCompare(b.title));
-                        case 'stock':
-                            return list.sort((a, b) => (b.stock > 0) - (a.stock > 0));
-                        default:
-                            return list;
-                    }
-                },
-
-                // SELECTION
-                toggleSelection(plant) {
-                    const idx = this.selectionList.findIndex(p => p.id === plant.id);
-                    if (idx >= 0) {
-                        this.selectionList.splice(idx, 1);
-                        this.showToast(`«${plant.title}» убран`);
-                    } else {
-                        this.selectionList.push(plant);
-                        this.showToast(`«${plant.title}» добавлен`);
-                    }
-                    this.saveStorage();
-                },
-
-                isSelected(plant) {
-                    return this.selectionList.some(p => p.id === plant.id);
-                },
-
-                calculateTotal() {
-                    return this.selectionList.reduce((sum, p) => sum + p.price, 0);
-                },
-
-                clearSelection() {
-                    this.selectionList = [];
-                    this.saveStorage();
-                    this.showToast('Корзина очищена');
-                },
-
-                copyForAvito() {
-                    let text = 'Здравствуйте! Хочу приобрести:\n\n';
-                    this.selectionList.forEach(p => {
-                        text += `• ${p.title} (${p.price} ₽)\n`;
-                    });
-                    text += `\nИтого: ${this.calculateTotal()} ₽.`;
-                    navigator.clipboard.writeText(text).then(() => {
-                        this.showToast('Список скопирован в буфер!');
-                    }).catch(() => {
-                        const textarea = document.createElement('textarea');
-                        textarea.value = text;
-                        document.body.appendChild(textarea);
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
-                        this.showToast('Список скопирован в буфер!');
-                    });
-                },
-
-                // COMPARISON
-                toggleComparison(plant) {
-                    const idx = this.comparisonList.findIndex(p => p.id === plant.id);
-                    if (idx >= 0) {
-                        this.comparisonList.splice(idx, 1);
-                        this.showToast(`«${plant.title}» убран из сравнения`);
-                    } else {
-                        if (this.comparisonList.length >= 3) {
-                            this.showToast('Можно сравнить не более 3 саженцев');
-                            return;
-                        }
-                        this.comparisonList.push(plant);
-                        this.showToast(`«${plant.title}» добавлен к сравнению`);
-                    }
-                    this.saveStorage();
-                },
-
-                isInComparison(plant) {
-                    return this.comparisonList.some(p => p.id === plant.id);
-                },
-
-                // MODAL
-                openModal(plant) {
-                    this.currentPlant = plant;
-                    this.activePhotoIndex = 0;
-                    this.modalOpen = true;
-                    this.isFullScreen = false;
-                },
-
-                closeModal() {
-                    this.modalOpen = false;
-                },
-
-                // FULLSCREEN
-                openFullScreen() {
-                    this.isFullScreen = true;
-                },
-
-                nextPhoto() {
-                    if (this.currentPlant.media && this.currentPlant.media.length > 1) {
-                        this.activePhotoIndex = (this.activePhotoIndex + 1) % this.currentPlant.media.length;
-                    }
-                },
-
-                prevPhoto() {
-                    if (this.currentPlant.media && this.currentPlant.media.length > 1) {
-                        this.activePhotoIndex = (this.activePhotoIndex - 1 + this.currentPlant.media.length) % this.currentPlant.media.length;
-                    }
-                },
-
-                // TOAST
-                showToast(message) {
-                    if (this.toastTimer) clearTimeout(this.toastTimer);
-                    this.toastMessage = message;
-                    this.toastTimer = setTimeout(() => {
-                        this.toastMessage = '';
-                    }, 2500);
-                },
-
-                // CARE
-                getCare(group) {
-                    const g = (group || '').toLowerCase();
-                    if (g.includes('яблоня') || g.includes('груша')) {
-                        return { light: 'Солнечное место', water: 'Умеренный полив, не заливать' };
-                    }
-                    if (g.includes('вишня') || g.includes('черешня')) {
-                        return { light: 'Солнечное, защищённое от ветра', water: 'Полив в засуху, не переувлажнять' };
-                    }
-                    if (g.includes('слива')) {
-                        return { light: 'Солнечное место', water: 'Умеренный полив, любит влагу' };
-                    }
-                    return { light: 'Солнечное или полутень', water: 'Умеренный полив' };
+            filtered.forEach(p => {
+                const { title, tags } = parseName(p.fullName);
+                const hasImage = p.images && p.images.length > 0;
+                const mainImage = hasImage ? p.images[0] : '';
+                
+                // Создание HTML для карточки
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group';
+                
+                // Шаблон изображения или заглушки
+                let imageHTML = '';
+                if (hasImage) {
+                    imageHTML = `
+                        <div class="relative h-56 w-full overflow-hidden bg-slate-100">
+                            <img src="${mainImage}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 left-3 bg-emerald-800 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">${p.group}</span>
+                        </div>
+                    `;
+                } else {
+                    imageHTML = `
+                        <div class="relative h-56 w-full overflow-hidden bg-emerald-50/50 flex flex-col items-center justify-center text-emerald-600/60 p-4">
+                            <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800/50">Фото ожидается</span>
+                            <span class="absolute top-3 left-3 bg-emerald-800 text-white text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">${p.group}</span>
+                        </div>
+                    `;
                 }
-            };
-        });
-        console.log('catalogApp registered successfully');
-    });
-</script>
 
-<!-- ====== ЗАГРУЗКА ALPINE ПОСЛЕ РЕГИСТРАЦИИ ====== -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+                // Теги характеристик
+                const tagsHTML = tags.slice(0, 3).map(tag => `
+                    <span class="bg-slate-100 text-slate-600 text-[11px] px-2.5 py-1 rounded-md font-medium truncate max-w-full" title="${tag}">${tag}</span>
+                `).join('');
+
+                card.innerHTML = `
+                    ${imageHTML}
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h4 class="font-bold text-slate-800 text-base leading-snug mb-2 line-clamp-2 h-12" title="${title}">${title}</h4>
+                        <div class="flex flex-wrap gap-1 mb-4 flex-grow overflow-hidden max-h-16">
+                            ${tagsHTML}
+                        </div>
+                        
+                        <div class="border-t border-slate-100 pt-4 mt-auto flex items-center justify-between">
+                            <div>
+                                <span class="text-slate-400 text-xs block">Цена</span>
+                                <span class="text-xl font-extrabold text-emerald-800">${p.price} ₽</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-slate-400 text-xs block">В наличии</span>
+                                <span class="text-xs font-semibold px-2 py-0.5 rounded ${p.stock > 30 ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}">${p.stock} шт</span>
+                            </div>
+                        </div>
+
+                        <button onclick="addToCart(${p.id})" class="mt-4 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2.5 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Добавить в корзину
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Фильтрация
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Смена активного класса кнопок
+            const buttons = document.querySelectorAll('#categoryFilters button');
+            buttons.forEach(btn => {
+                if (btn.innerText.includes(category) || (category === 'Все' && btn.innerText.includes('Все'))) {
+                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-emerald-800 text-white shadow-sm";
+                } else {
+                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
+                }
+            });
+
+            renderProducts();
+        }
+
+        // Поиск
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderProducts();
+        });
+
+        // Работа с Корзиной
+        function addToCart(id) {
+            const product = productsData.find(p => p.id === id);
+            if (!product) return;
+
+            if (cart[id]) {
+                if (cart[id].quantity < product.stock) {
+                    cart[id].quantity += 1;
+                } else {
+                    alert(`На складе доступно только ${product.stock} шт.`);
+                    return;
+                }
+            } else {
+                cart[id] = {
+                    product: product,
+                    quantity: 1
+                };
+            }
+            updateCartUI();
+        }
+
+        function updateCartQuantity(id, change) {
+            if (!cart[id]) return;
+            const newQty = cart[id].quantity + change;
+            const maxStock = cart[id].product.stock;
+
+            if (newQty <= 0) {
+                delete cart[id];
+            } else if (newQty > maxStock) {
+                alert(`Достигнуто максимальное количество на складе (${maxStock} шт.)`);
+            } else {
+                cart[id].quantity = newQty;
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Подсчет общего количества
+            let totalCount = 0;
+            let totalSum = 0;
+            
+            for (const key in cart) {
+                totalCount += cart[key].quantity;
+                totalSum += cart[key].quantity * cart[key].product.price;
+            }
+
+            document.getElementById('cartCount').innerText = totalCount;
+            document.getElementById('cartTotalSum').innerText = `${totalSum} ₽`;
+
+            // Обновление списка товаров в модальном окне
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = '';
+
+            if (Object.keys(cart).length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-8 text-slate-400">
+                        <svg class="w-12 h-12 mx-auto mb-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        Ваша корзина пуста
+                    </div>
+                `;
+                return;
+            }
+
+            for (const key in cart) {
+                const item = cart[key];
+                const { title } = parseName(item.product.fullName);
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'py-4 flex items-center justify-between gap-4';
+                itemDiv.innerHTML = `
+                    <div class="flex-grow">
+                        <h5 class="font-semibold text-slate-800 text-sm leading-tight mb-1">${title}</h5>
+                        <p class="text-xs text-slate-400">${item.product.group} • ${item.product.price} ₽/шт</p>
+                    </div>
+                    <div class="flex items-center gap-3 shrink-0">
+                        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden bg-white">
+                            <button onclick="updateCartQuantity(${item.product.id}, -1)" class="px-2.5 py-1 hover:bg-slate-50 transition text-slate-500 font-bold">-</button>
+                            <span class="px-3 py-1 text-sm font-semibold text-slate-800">${item.quantity}</span>
+                            <button onclick="updateCartQuantity(${item.product.id}, 1)" class="px-2.5 py-1 hover:bg-slate-50 transition text-slate-500 font-bold">+</button>
+                        </div>
+                        <span class="font-bold text-slate-900 text-sm min-w-[60px] text-right">${item.quantity * item.product.price} ₽</span>
+                    </div>
+                `;
+                list.appendChild(itemDiv);
+            }
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Отправка заказа в мессенджеры
+        function sendOrder(platform) {
+            if (Object.keys(cart).length === 0) {
+                alert('Сначала добавьте саженцы в корзину.');
+                return;
+            }
+
+            let message = "Здравствуйте! Хочу сделать заказ на саженцы:\n\n";
+            let totalSum = 0;
+            
+            for (const key in cart) {
+                const item = cart[key];
+                const { title } = parseName(item.product.fullName);
+                const sum = item.quantity * item.product.price;
+                message += `🌱 ${title} (${item.product.group})\n   Кол-во: ${item.quantity} шт. х ${item.product.price} ₽ = ${sum} ₽\n\n`;
+                totalSum += sum;
+            }
+            
+            message += `💰 Итого к оплате: ${totalSum} ₽`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            let link = '';
+
+            if (platform === 'telegram') {
+                // Вы можете заменить "my_garden_bot" или никнейм на ваш личный контакт
+                link = `https://t.me/share/url?url=&text=${encodedMessage}`;
+            } else if (platform === 'whatsapp') {
+                // Вы можете подставить свой реальный номер вместо 79990000000
+                link = `https://api.whatsapp.com/send?phone=79990000000&text=${encodedMessage}`;
+            }
+
+            window.open(link, '_blank');
+        }
+
+        // Первичный рендеринг при загрузке страницы
+        window.onload = () => {
+            renderProducts();
+            updateCartUI();
+        };
+    </script>
 </body>
 </html>
