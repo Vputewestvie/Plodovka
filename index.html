@@ -13,6 +13,14 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* Стилизация скроллбара для горизонтального меню */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
@@ -33,8 +41,8 @@
                     </div>
                 </div>
                 
-                <!-- Телефон для заказа -->
-                <a href="tel:+79785848434" class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-100 hover:text-white transition font-semibold sm:border-l sm:border-emerald-700 sm:pl-4 mt-1 sm:mt-0" title="Позвонить для заказа саженцев">
+                <!-- Телефон для связи -->
+                <a href="tel:+79785848434" class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-100 hover:text-white transition font-semibold sm:border-l sm:border-emerald-700 sm:pl-4 mt-1 sm:mt-0" title="Позвонить">
                     <svg class="w-4 h-4 text-emerald-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
@@ -88,23 +96,23 @@
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
                 <h3 class="text-white font-semibold text-lg mb-4">Питомник «Плодовка»</h3>
-                <p class="text-sm leading-relaxed">Мы выращиваем районированные сорта ягодных кустарников с отличными вкусовыми качествами и высокой урожайностью.</p>
+                <p class="text-sm leading-relaxed">Мы выращиваем саженцы ягодных кустарников с отличными вкусовыми качествами и высокой урожайностью. Доставка осуществляется специализированными службами.</p>
             </div>
             <div>
-                <h3 class="text-white font-semibold text-lg mb-4">Контакты и заказ</h3>
-                <p class="text-sm mb-2">📍 Самовывоз из питомника или доставка ТК</p>
-                <p class="text-sm mb-2">
-                    📞 Телефон: <a href="tel:+79785848434" class="text-emerald-400 hover:underline">+7 (978) 584-84-34</a>
-                </p>
-                <p class="text-sm">💬 Пишите в мессенджерах для консультаций</p>
+                <h3 class="text-white font-semibold text-lg mb-4">Доставка и контакты</h3>
+                <p class="text-sm mb-2">🚗 Доставляем на машине по Севастополю, а также периодически в Симферополь.</p>
+                <p class="text-sm mb-2">📦 Возможна отправка транспортными компаниями (ТК) по всей России.</p>
+                <p class="text-sm mb-2">⚠️ <strong class="text-amber-500">Самовывоза нет.</strong> Работаем только через службы доставки.</p>
+                <p class="text-sm mb-2">📞 Телефон для звонков: <a href="tel:+79785848434" class="text-emerald-400 hover:underline font-semibold">+7 (978) 584-84-34</a></p>
+                <p class="text-sm">💬 По всем вопросам, пожалуйста, пишите в сообщения на платформе <strong class="text-emerald-400">Авито</strong> (не в мессенджеры).</p>
             </div>
             <div>
                 <h3 class="text-white font-semibold text-lg mb-4">Правила заказа</h3>
-                <p class="text-sm leading-relaxed">Выберите интересующие сорта в каталоге, добавьте их в корзину и отправьте сформированный список менеджеру для подтверждения наличия.</p>
+                <p class="text-sm leading-relaxed mb-3">Выберите желаемые позиции в каталоге, добавьте их в корзину, нажмите кнопку отправки заказа через Авито. Список автоматически скопируется в буфер обмена — вам останется лишь отправить его нам в чате Авито для подтверждения наличия.</p>
             </div>
         </div>
         
-        <!-- Нижняя строка футера с копирайтом и рекламой разработчика -->
+        <!-- Нижняя строка футера -->
         <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs">
             <span>© 2026 Питомник саженцев «Плодовка». Все права защищены.</span>
             
@@ -118,7 +126,7 @@
         </div>
     </footer>
 
-    <!-- Модальное окно деталей товара (Карточка товара) -->
+    <!-- Модальное окно деталей товара -->
     <div id="productModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" onclick="event.target.id === 'productModal' && closeProductModal()">
         <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative animate-in fade-in zoom-in-95 duration-200">
             <!-- Кнопка закрытия -->
@@ -126,9 +134,9 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <div class="overflow-y-auto flex-grow flex flex-col md:flex-row">
-                <!-- Изображения товара -->
+                <!-- Изображения товара (клик открывает Лайтбокс) -->
                 <div class="md:w-1/2 bg-slate-50 flex flex-col justify-center items-center relative min-h-[300px]">
-                    <div id="modalImageContainer" class="w-full h-full flex items-center justify-center">
+                    <div id="modalImageContainer" class="w-full h-full flex items-center justify-center cursor-zoom-in" onclick="openLightboxFromModal()" title="Кликните для увеличения">
                         <!-- Сюда вставляется активное фото -->
                     </div>
                     <!-- Слайдер навигация -->
@@ -185,30 +193,47 @@
                 <!-- Сюда вставляются товары -->
             </div>
 
-            <!-- Итоги и форма -->
+            <!-- Итоги и кнопка заказа через Авито -->
             <div class="p-6 bg-slate-50 border-t border-slate-100 space-y-4">
                 <div class="flex justify-between items-center font-bold text-lg text-slate-900">
                     <span>Итого к оплате:</span>
                     <span id="cartTotalSum">0 ₽</span>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="sendOrder('telegram')" class="bg-[#229ED9] hover:bg-[#208fca] text-white py-3 px-4 rounded-xl font-medium transition text-sm flex items-center justify-center gap-2">
-                        Отправить в Telegram
-                    </button>
-                    <button onclick="sendOrder('whatsapp')" class="bg-[#25D366] hover:bg-[#20ba56] text-white py-3 px-4 rounded-xl font-medium transition text-sm flex items-center justify-center gap-2">
-                        Отправить в WhatsApp
-                    </button>
-                </div>
-                <p class="text-center text-[11px] text-slate-400">Нажимая кнопку, вы перейдете в мессенджер с автоматически сформированным текстом заказа.</p>
+                <button onclick="copyAndRedirectToAvito()" class="w-full bg-[#00AAFF] hover:bg-[#0099e6] text-white py-4 px-4 rounded-xl font-semibold transition text-sm flex items-center justify-center gap-2 shadow">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    Оформить заказ через Авито
+                </button>
+                <p class="text-center text-[11px] text-slate-400 leading-tight">При нажатии список товаров автоматически скопируется в буфер обмена, после чего откроется Авито. Вам останется только вставить текст в сообщения.</p>
             </div>
         </div>
+    </div>
+
+    <!-- Лайтбокс для детального просмотра изображений в максимальном размере -->
+    <div id="lightboxModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-slate-300 bg-white/10 hover:bg-white/20 p-2.5 rounded-full z-10 transition">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="w-full h-full overflow-auto flex items-center justify-center p-2">
+            <img id="lightboxImage" src="" alt="Увеличенное изображение" class="max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300" onclick="toggleLightboxZoom(event)">
+        </div>
+    </div>
+
+    <!-- Всплывающее уведомление (Toast) -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toastText" class="text-sm font-medium">Уведомление</span>
     </div>
 
     <!-- JavaScript-логика работы сайта -->
     <script>
         // Ссылка на экспорт вашей Google Таблицы в формате CSV
         const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk/export?format=csv&gid=0";
+        
+        // Ссылка на ваш профиль или чат на Авито (Замените на свою при необходимости)
+        const avitoProfileUrl = "https://www.avito.ru"; 
 
         let productsData = [];
         let currentCategory = 'Все';
@@ -218,6 +243,9 @@
         // Состояние для слайдера в карточке товара
         let activeModalImageIndex = 0;
         let currentModalImages = [];
+        
+        // Состояние масштабирования Лайтбокса
+        let isLightboxZoomed = false;
 
         // Загрузка данных из Google Таблицы
         async function loadProductsFromSheet() {
@@ -361,7 +389,6 @@
                             </div>
                         </div>
 
-                        <!-- Обязательный event.stopPropagation(), чтобы клик по кнопке не триггерил открытие модалки -->
                         <button onclick="event.stopPropagation(); addToCart(${p.id})" class="mt-4 w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2.5 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             Добавить в корзину
@@ -436,7 +463,8 @@
                     currentModalImages.forEach((_, idx) => {
                         const dot = document.createElement('button');
                         dot.className = `w-2.5 h-2.5 rounded-full transition ${idx === activeModalImageIndex ? 'bg-emerald-800 w-5' : 'bg-slate-300 hover:bg-slate-400'}`;
-                        dot.onclick = () => {
+                        dot.onclick = (e) => {
+                            e.stopPropagation(); // Предотвращаем клик по самому изображению при переключении точек
                             activeModalImageIndex = idx;
                             showModalImage();
                         };
@@ -453,6 +481,45 @@
                     </div>
                 `;
             }
+        }
+
+        // Открытие Лайтбокса при клике на картинку в карточке
+        function openLightboxFromModal() {
+            if (currentModalImages && currentModalImages.length > 0) {
+                const src = currentModalImages[activeModalImageIndex];
+                openLightbox(src);
+            }
+        }
+
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightboxModal');
+            const img = document.getElementById('lightboxImage');
+            img.src = src;
+            
+            // Сброс зума при новом открытии
+            isLightboxZoomed = false;
+            img.className = "max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300";
+            
+            lightbox.classList.remove('hidden');
+        }
+
+        // Переключение зума в Лайтбоксе (клик по увеличенной картинке)
+        function toggleLightboxZoom(event) {
+            event.stopPropagation(); // Не закрываем лайтбокс при клике на саму картинку
+            const img = document.getElementById('lightboxImage');
+            isLightboxZoomed = !isLightboxZoomed;
+            
+            if (isLightboxZoomed) {
+                // Картинка отображается в её максимальном (исходном) размере
+                img.className = "max-w-none max-h-none object-contain select-none cursor-zoom-out transition-all duration-300";
+            } else {
+                // Картинка вписывается в экран
+                img.className = "max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300";
+            }
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.add('hidden');
         }
 
         function closeProductModal() {
@@ -570,8 +637,8 @@
             modal.classList.toggle('hidden');
         }
 
-        // Отправка заказа в мессенджеры
-        function sendOrder(platform) {
+        // Логика копирования списка заказа и перенаправления на Авито
+        function copyAndRedirectToAvito() {
             if (Object.keys(cart).length === 0) {
                 alert('Сначала добавьте саженцы в корзину.');
                 return;
@@ -590,17 +657,35 @@
             
             message += `💰 Итого к оплате: ${totalSum} ₽`;
             
-            const encodedMessage = encodeURIComponent(message);
-            let link = '';
+            // Копирование в буфер обмена
+            navigator.clipboard.writeText(message).then(() => {
+                showToast("📋 Заказ скопирован! Перенаправляем на Авито...");
+                
+                // Скрываем модальное окно корзины
+                setTimeout(() => {
+                    toggleCartModal();
+                    // Перенаправление на платформу Авито
+                    window.open(avitoProfileUrl, '_blank');
+                }, 1800);
+            }).catch(err => {
+                console.error("Не удалось скопировать автоматически:", err);
+                alert("Ошибка автоматического копирования. Пожалуйста, скопируйте текст заказа вручную.");
+            });
+        }
 
-            if (platform === 'telegram') {
-                link = `https://t.me/share/url?url=&text=${encodedMessage}`;
-            } else if (platform === 'whatsapp') {
-                // Изменено на указанный контактный телефон владельца
-                link = `https://api.whatsapp.com/send?phone=79785848434&text=${encodedMessage}`;
-            }
-
-            window.open(link, '_blank');
+        // Показ Toast-уведомлений
+        function showToast(text) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = text;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
         }
 
         // Инициализация при загрузке
