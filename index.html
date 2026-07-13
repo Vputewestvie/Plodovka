@@ -6,7 +6,7 @@
     <title>Питомник Саженцев — Плодово-ягодные культуры</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Библиотека PapaParse для автоматического чтения CSV из Google Таблицы -->
+    <!-- Подключение PapaParse для надёжного чтения Google Таблицы -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -75,10 +75,7 @@
 
         <!-- Каталог саженцев -->
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Загрузочный спиннер или карточки -->
-            <div class="col-span-full text-center py-12">
-                <p class="text-slate-500 animate-pulse font-medium">Загрузка саженцев из Google Таблицы...</p>
-            </div>
+            <!-- Сюда загружаются карточки -->
         </div>
 
         <!-- Сообщение, если ничего не найдено -->
@@ -152,64 +149,60 @@
 
     <!-- JavaScript-логика работы сайта -->
     <script>
-        // Теперь данные загружаются динамически из Google Таблицы по ссылке
-        let productsData = []; 
+        // Ссылка на экспорт вашей Google Таблицы в формате CSV
+        const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk/export?format=csv&gid=0";
+
+        let productsData = [];
         let currentCategory = 'Все';
         let searchQuery = '';
         let cart = {};
 
-        // Функция загрузки данных из Google Таблицы (формат экспорта CSV)
-        async function loadProductsFromGoogleSheet() {
-            const spreadsheetId = "1-0S3n227q-louVVKXTdOOGLvEONiLnBNSxdKit--sJk";
-            const gid = "0"; // ID листа
-            const sheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`;
+        // Загрузка данных из Google Таблицы
+        async function loadProductsFromSheet() {
+            const grid = document.getElementById('productGrid');
+            
+            // Показываем индикатор загрузки
+            grid.innerHTML = `
+                <div class="col-span-full text-center py-24">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800 mx-auto"></div>
+                    <p class="mt-4 text-slate-500 font-medium">Загрузка каталога из Google Таблицы...</p>
+                </div>`;
 
-            try {
-                const response = await fetch(sheetUrl);
-                if (!response.ok) throw new Error("Ошибка доступа или сеть недоступна");
-                
-                const csvText = await response.text();
-                
-                // Парсинг CSV данных с помощью PapaParse
-                const parsed = Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true
-                });
+            Papa.parse(sheetCsvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    // Фильтруем пустые строки и преобразуем в массив объектов для каталога
+                    productsData = results.data
+                        .filter(row => row['Наименование'] && row['Наименование'].trim() !== '')
+                        .map((row, index) => {
+                            const images = [];
+                            if (row['Фото1'] && row['Фото1'].trim()) images.push(row['Фото1'].trim());
+                            if (row['фото2'] && row['фото2'].trim()) images.push(row['фото2'].trim());
 
-                // Преобразуем полученные строки таблицы в формат для сайта
-                productsData = parsed.data.map((row, index) => {
-                    const price = parseInt(row["Цена"]) || 0;
-                    const stock = parseInt(row["На_складе"]) || 0;
-                    
-                    const images = [];
-                    // Проверяем наличие фото (разный регистр на случай опечаток в заголовках)
-                    const img1 = row["Фото1"] || row["фото1"] || row["Foto1"] || row["foto1"];
-                    const img2 = row["Фото2"] || row["фото2"] || row["Foto2"] || row["foto2"];
-                    
-                    if (img1 && img1.trim() !== "") images.push(img1.trim());
-                    if (img2 && img2.trim() !== "") images.push(img2.trim());
+                            return {
+                                id: index + 1,
+                                fullName: row['Наименование'].trim(),
+                                group: row['Группа'] ? row['Группа'].trim() : 'Другое',
+                                price: parseInt(row['Цена']) || 0,
+                                stock: parseInt(row['На_складе']) || 0,
+                                images: images
+                            };
+                        });
 
-                    return {
-                        id: index + 1,
-                        fullName: row["Наименование"] || "",
-                        group: row["Группа"] || "Прочее",
-                        price: price,
-                        stock: stock,
-                        images: images
-                    };
-                }).filter(p => p.fullName && p.fullName.trim() !== ""); // Исключаем пустые строки
-
-                renderProducts();
-            } catch (error) {
-                console.error("Не удалось подгрузить данные из таблицы:", error);
-                document.getElementById('productGrid').innerHTML = `
-                    <div class="col-span-full text-center py-12 bg-red-50 rounded-2xl border border-red-100 p-6">
-                        <svg class="w-12 h-12 text-red-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        <p class="text-red-800 font-bold text-lg">Не удалось загрузить каталог товаров</p>
-                        <p class="text-red-600 text-sm mt-1">Пожалуйста, убедитесь, что у Google Таблицы настроен доступ «Все, у кого есть ссылка» (Роль: Читатель).</p>
-                    </div>
-                `;
-            }
+                    renderProducts();
+                    updateCartUI();
+                },
+                error: function(err) {
+                    console.error("Ошибка при разборе CSV:", err);
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-16 text-red-600">
+                            <p class="font-semibold text-lg">Не удалось обработать данные таблицы.</p>
+                            <p class="text-sm text-slate-500 mt-2">Пожалуйста, проверьте настройки доступа в Google Таблице.</p>
+                        </div>`;
+                }
+            });
         }
 
         // Функция парсинга сложной строки наименования в структурированный вид
@@ -259,11 +252,9 @@
                 const hasImage = p.images && p.images.length > 0;
                 const mainImage = hasImage ? p.images[0] : '';
                 
-                // Создание HTML для карточки
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group';
                 
-                // Шаблон изображения или заглушки
                 let imageHTML = '';
                 if (hasImage) {
                     imageHTML = `
@@ -284,7 +275,6 @@
                     `;
                 }
 
-                // Теги характеристик
                 const tagsHTML = tags.slice(0, 3).map(tag => `
                     <span class="bg-slate-100 text-slate-600 text-[11px] px-2.5 py-1 rounded-md font-medium truncate max-w-full" title="${tag}">${tag}</span>
                 `).join('');
@@ -322,7 +312,6 @@
         function filterCategory(category) {
             currentCategory = category;
             
-            // Смена активного класса кнопок
             const buttons = document.querySelectorAll('#categoryFilters button');
             buttons.forEach(btn => {
                 if (btn.innerText.includes(category) || (category === 'Все' && btn.innerText.includes('Все'))) {
@@ -378,7 +367,6 @@
         }
 
         function updateCartUI() {
-            // Подсчет общего количества
             let totalCount = 0;
             let totalSum = 0;
             
@@ -390,7 +378,6 @@
             document.getElementById('cartCount').innerText = totalCount;
             document.getElementById('cartTotalSum').innerText = `${totalSum} ₽`;
 
-            // Обновление списка товаров в модальном окне
             const list = document.getElementById('cartItemsList');
             list.innerHTML = '';
 
@@ -464,10 +451,9 @@
             window.open(link, '_blank');
         }
 
-        // Первичный рендеринг при загрузке страницы
+        // Инициализация при загрузке
         window.onload = () => {
-            loadProductsFromGoogleSheet();
-            updateCartUI();
+            loadProductsFromSheet();
         };
     </script>
 </body>
