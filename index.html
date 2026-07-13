@@ -27,7 +27,7 @@
     <!-- Favicon (emoji fallback) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
     
-    <!-- JSON-LD Structured Data (Organization + Product) -->
+    <!-- JSON-LD Structured Data (Organization + Product + Reviews) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -37,6 +37,13 @@
       "url": "https://vputewestvie.github.io/Plodovka/",
       "telephone": "+79785848434",
       "areaServed": ["Севастополь", "Симферополь", "Россия"],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "500",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Саженцы",
