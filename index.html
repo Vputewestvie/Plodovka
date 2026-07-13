@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Саженцы плодовых культур в подвале</title>
+    <title>Саженцы плодовых культур</title>
     <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключение PapaParse для надежного чтения Google Таблицы -->
@@ -91,17 +91,17 @@
         </div>
     </main>
 
-    <!-- Футер -->
+    <!-- Подвал сайта (Футер) -->
     <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-                <h3 class="text-white font-semibold text-lg mb-4">Саженцы плодовых культур в подвале</h3>
+                <h3 class="text-white font-semibold text-lg mb-4">Саженцы плодовых культур</h3>
                 <p class="text-sm leading-relaxed">Мы занимаемся отбором лучших сортов ягодных культур напрямую у проверенных производителей и организуем их бережную доставку к вам на участок. Каждый саженец проходит строгий контроль качества перед отправкой.</p>
             </div>
             <div>
                 <h3 class="text-white font-semibold text-lg mb-4">Доставка и контакты</h3>
                 <p class="text-sm mb-2">🚗 Доставляем на машине по Севастополю, а также периодически в Симферополь.</p>
-                <p class="text-sm mb-2">📦 Возможна отправка транспортными компаниями (ТК) по всей России.</p>
+                <p class="text-sm mb-2">📦 Доставка осуществляется транспортными компаниями (<strong class="text-emerald-400">СДЭК</strong>, <strong class="text-emerald-400">Почта России</strong>) по всей России.</p>
                 <p class="text-sm mb-2">⚠️ Работаем исключительно через службы доставки.</p>
                 <p class="text-sm mb-2">📞 Телефон для звонков: <a href="tel:+79785848434" class="text-emerald-400 hover:underline font-semibold">+7 (978) 584-84-34</a></p>
                 <p class="text-sm">💬 По всем вопросам, пожалуйста, пишите в сообщения на платформе <strong class="text-emerald-400">Авито</strong> (не в мессенджеры).</p>
@@ -112,9 +112,9 @@
             </div>
         </div>
         
-        <!-- Нижняя строка футера -->
+        <!-- Нижняя строка подвала -->
         <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs">
-            <span>© 2026 Саженцы плодовых культур в подвале. Все права защищены.</span>
+            <span>© 2026 Саженцы плодовых культур. Все права защищены.</span>
             
             <!-- Ссылка на разработчика -->
             <a href="https://t.me/Maks_studio_ai" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-3.5 py-2 rounded-full border border-slate-800 hover:border-slate-700">
@@ -505,7 +505,7 @@
             lightbox.classList.remove('hidden');
         }
 
-        // Переключение зума в Лайтбоксе (клик по увеличенной картинке)
+        // Переключение зума в Лайтбокса (клик по увеличенной картинке)
         function toggleLightboxZoom(event) {
             event.stopPropagation(); // Не закрываем лайтбокс при клике на саму картинку
             const img = document.getElementById('lightboxImage');
@@ -572,6 +572,7 @@
             updateCartUI();
         }
 
+        // Изменение количества товаров в корзине
         function updateCartQuantity(id, change) {
             if (!cart[id]) return;
             const newQty = cart[id].quantity + change;
@@ -587,6 +588,7 @@
             updateCartUI();
         }
 
+        // Обновление интерфейса корзины
         function updateCartUI() {
             let totalCount = 0;
             let totalSum = 0;
@@ -633,6 +635,11 @@
                 `;
                 list.appendChild(itemDiv);
             }
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('hidden');
         }
 
         // Логика копирования списка заказа и перенаправления на Авито
