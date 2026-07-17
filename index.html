@@ -350,7 +350,7 @@
     </header>
 
     <!-- Главная часть: Фильтры и Список товаров -->
-    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full" id="main-content">
         <!-- Фильтры по категориям (генерируются автоматически из данных таблицы) -->
         <div class="mb-8 overflow-x-auto pb-2 scrollbar-none">
             <div class="flex gap-2 min-w-max" id="categoryFilters">
@@ -372,47 +372,49 @@
     </main>
 
     <!-- Блок FAQ (Часто задаваемые вопросы) -->
-    <section class="bg-white border-t border-slate-100 py-16">
+    <section class="bg-white border-t border-slate-100 py-10">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-12">
+            <div class="text-center mb-8">
                 <span class="text-emerald-700 font-semibold text-sm uppercase tracking-wider">Поддержка</span>
-                <h2 class="font-serif text-3xl md:text-4xl font-bold text-slate-900 mt-2">Часто задаваемые вопросы</h2>
+                <h2 class="font-serif text-2xl md:text-3xl font-bold text-slate-900 mt-2">Часто задаваемые вопросы</h2>
             </div>
-            <div class="space-y-4">
-                <details class="group bg-slate-50/50 rounded-2xl border border-slate-100 overflow-hidden">
-                    <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold text-slate-900 hover:bg-slate-50 transition">
-                        <span>Как происходит доставка саженцев?</span>
-                        <svg class="w-5 h-5 text-emerald-700 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <div class="grid gap-2.5">
+                <details class="group bg-slate-50/50 rounded-xl border border-slate-100 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-3.5 font-semibold text-slate-900 hover:bg-slate-50 transition">
+                        <span class="text-sm">Как происходит доставка саженцев?</span>
+                        <svg class="w-4 h-4 text-emerald-700 transition group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <div class="px-6 pb-6 text-sm text-slate-600 leading-relaxed">
-                        <p>Доставка по Севастополю осуществляется нашим транспортом. В другие регионы России отправляем через СДЭК и Почту России. Все саженцы упаковываются в специальный материал для сохранения влажности и защиты от повреждений.</p>
+                    <div class="px-3.5 pb-3.5 text-xs text-slate-600 leading-relaxed">
+                        <p>По Севастополю — своим транспортом. В другие регионы — через СДЭК и Почту России. Упаковка защищает от повреждений и сохраняет влажность.</p>
                     </div>
                 </details>
-                <details class="group bg-slate-50/50 rounded-2xl border border-slate-100 overflow-hidden">
-                    <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold text-slate-900 hover:bg-slate-50 transition">
-                        <span>Какой срок гарантии на саженцы?</span>
-                        <svg class="w-5 h-5 text-emerald-700 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <details class="group bg-slate-50/50 rounded-xl border border-slate-100 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-3.5 font-semibold text-slate-900 hover:bg-slate-50 transition">
+                        <span class="text-sm">Какой срок гарантии на саженцы?</span>
+                        <svg class="w-4 h-4 text-emerald-700 transition group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <div class="px-6 pb-6 text-sm text-slate-600 leading-relaxed">
-                        <p>Мы гарантируем приживаемость саженцев в течение 1 сезона. Если саженец не прижился при соблюдении правил ухода, мы заменим его или вернём деньги.</p>
+                    <div class="px-3.5 pb-3.5 text-xs text-slate-600 leading-relaxed">
+                        <p>Мы гарантируем приживаемость саженцев в течение 1 сезона при соблюдении правил ухода.</p>
                     </div>
                 </details>
-                <details class="group bg-slate-50/50 rounded-2xl border border-slate-100 overflow-hidden">
-                    <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold text-slate-900 hover:bg-slate-50 transition">
-                        <span>Можно ли заказать несколько сортов сразу?</span>
-                        <svg class="w-5 h-5 text-emerald-700 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <details class="group bg-slate-50/50 rounded-xl border border-slate-100 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-3.5 font-semibold text-slate-900 hover:bg-slate-50 transition">
+                        <span class="text-sm">Можно ли заказать несколько сортов сразу?</span>
+                        <svg class="w-4 h-4 text-emerald-700 transition group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <div class="px-6 pb-6 text-sm text-slate-600 leading-relaxed">
-                        <p>Конечно! Добавьте все желаемые саженцы в корзину, нажмите "Оформить заказ через Авито", и мы отправим вам полный список с итоговой суммой. Вы можете оплатить всё сразу или отдельно.</p>
+                    <div class="px-3.5 pb-3.5 text-xs text-slate-600 leading-relaxed">
+                        <p>Да! Добавьте всё в корзину, оформите через Авито — мы вышлем список с итоговой суммой.</p>
                     </div>
                 </details>
-                <details class="group bg-slate-50/50 rounded-2xl border border-slate-100 overflow-hidden">
-                    <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold text-slate-900 hover:bg-slate-50 transition">
-                        <span>Как происходит оплата?</span>
-                        <svg class="w-5 h-5 text-emerald-700 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <details class="group bg-slate-50/50 rounded-xl border border-slate-100 overflow-hidden">
+                    <summary class="flex justify-between items-center cursor-pointer p-3.5 font-semibold text-slate-900 hover:bg-slate-50 transition">
+                        <span class="text-sm">Как происходит оплата?</span>
+                        <svg class="w-4 h-4 text-emerald-700 transition group-open:rotate-180 shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </summary>
-                    <div class="px-6 pb-6 text-sm text-slate-600 leading-relaxed">
-                        <p>Оплата производится после подтверждения наличия товара. Мы работаем через Авито, где доступны все безопасные способы оплаты: наличные при получении, банковская карта, перевод на счёт.</p>
+                    <div class="px-3.5 pb-3.5 text-xs text-slate-600 leading-relaxed">
+                        <p class="mb-1.5">При доставке по Севастополю или Симферополю — оплата на месте при получении.</p>
+                        <p class="mb-1.5">При отправке почтой или СДЭК — предоплата.</p>
+                        <p>На некоторые культуры и крупные заказы также требуется предоплата. Все платежи проходят через безопасные способы Авито: наличные или карта.</p>
                     </div>
                 </details>
             </div>
@@ -444,41 +446,41 @@
     </section>
 
     <!-- Блок "Почему выбирают нас" -->
-    <section class="bg-white border-t border-slate-100 py-16">
+    <section class="bg-white border-t border-slate-100 py-10">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-12">
+            <div class="text-center mb-8">
                 <span class="text-emerald-700 font-semibold text-sm uppercase tracking-wider">Преимущества</span>
-                <h2 class="font-serif text-3xl md:text-4xl font-bold text-slate-900 mt-2">Почему выбирают нас</h2>
-                <p class="text-slate-500 mt-3 max-w-2xl mx-auto">Мы гарантируем качество каждого саженца и заботимся о вашем саде</p>
+                <h2 class="font-serif text-2xl md:text-3xl font-bold text-slate-900 mt-2">Почему выбирают нас</h2>
+                <p class="text-slate-500 mt-2 max-w-2xl mx-auto text-sm">Мы гарантируем качество каждого саженца и заботимся о вашем саде</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="text-center p-6 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center p-5 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="font-bold text-slate-900 mb-2">Проверенное качество</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">Каждый саженец проходит строгий контроль перед отправкой</p>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-sm">Проверенное качество</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Каждый саженец проходит строгий контроль перед отправкой</p>
                 </div>
-                <div class="text-center p-6 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                <div class="text-center p-5 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                     </div>
-                    <h3 class="font-bold text-slate-900 mb-2">Доставка по РФ</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">СДЭК, Почта России — отправляем в любой регион</p>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-sm">Доставка по РФ</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">СДЭК, Почта России — отправляем в любой регион</p>
                 </div>
-                <div class="text-center p-6 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="text-center p-5 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 class="font-bold text-slate-900 mb-2">Быстрая обработка</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">Отвечаем в течение нескольких часов в чате Авито</p>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-sm">Быстрая обработка</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Отвечаем в течение нескольких часов в чате Авито</p>
                 </div>
-                <div class="text-center p-6 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
-                    <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                <div class="text-center p-5 rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                     </div>
-                    <h3 class="font-bold text-slate-900 mb-2">Забота о клиентах</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">Поможем с выбором сорта и ответим на все вопросы</p>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-sm">Забота о клиентах</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Поможем с выбором сорта и ответим на все вопросы</p>
                 </div>
             </div>
         </div>
@@ -492,26 +494,26 @@
     </button>
 
     <!-- Подвал сайта (Футер) -->
-    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer class="bg-slate-900 text-slate-400 py-8 mt-auto border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-                <h3 class="text-white font-semibold text-lg mb-4">Саженцы плодовых культур</h3>
-                <p class="text-sm leading-relaxed">Мы занимаемся отбором лучших сортов ягодных культур напрямую у проверенных производителей и организуем их бережную доставку к вам на участок. Каждый саженец проходит строгий контроль качества перед отправкой.</p>
+                <h3 class="text-white font-semibold text-base mb-3">Саженцы плодовых культур</h3>
+                <p class="text-xs leading-relaxed">Мы занимаемся отбором лучших сортов ягодных культур напрямую у проверенных производителей и организуем их бережную доставку к вам на участок. Каждый саженец проходит строгий контроль качества перед отправкой.</p>
             </div>
             <div>
-                <h3 class="text-white font-semibold text-lg mb-4">Доставка и контакты</h3>
-                <p class="text-sm mb-2">🚗 Доставляем на машине по Севастополю, а также периодически в Симферополь.</p>
-                <p class="text-sm mb-2">📦 Доставка осуществляется транспортными компаниями (<strong class="text-emerald-400">СДЭК</strong>, <strong class="text-emerald-400">Почта России</strong>) по всей России.</p>
-                <p class="text-sm mb-2">⚠️ Работаем исключительно через службы доставки.</p>
-                <p class="text-sm mb-3">📞 Телефон для звонков: <a href="tel:+79785848434" class="text-emerald-400 hover:underline font-semibold">+7 (978) 584-84-34</a></p>
+                <h3 class="text-white font-semibold text-base mb-3">Доставка и контакты</h3>
+                <p class="text-xs mb-1.5">🚗 Доставляем на машине по Севастополю, а также периодически в Симферополь.</p>
+                <p class="text-xs mb-1.5">📦 Доставка осуществляется транспортными компаниями (<strong class="text-emerald-400">СДЭК</strong>, <strong class="text-emerald-400">Почта России</strong>) по всей России.</p>
+                <p class="text-xs mb-1.5">⚠️ Работаем исключительно через службы доставки.</p>
+                <p class="text-xs mb-2">📞 Телефон для звонков: <a href="tel:+79785848434" class="text-emerald-400 hover:underline font-semibold">+7 (978) 584-84-34</a></p>
                 
                 <!-- Блок контактов на Авито с логотипом и прямой текстовой гиперссылкой -->
-                <div class="text-sm space-y-1">
-                    <p class="flex flex-wrap items-center gap-1.5">
+                <div class="text-xs space-y-1">
+                    <p class="flex flex-wrap items-center gap-1">
                         <span>💬 По всем вопросам, пожалуйста, пишите в сообщения на платформе</span>
                         <a href="https://www.avito.ru/brands/i202143646?src=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 transition underline font-semibold" title="Открыть профиль на Авито">
                             <!-- Фирменный цветной значок Авито (3 перекрывающихся круга) -->
-                            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none">
+                            <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
                                 <circle cx="8" cy="8" r="5" fill="#00AAFF" opacity="0.9" />
                                 <circle cx="16" cy="8" r="5" fill="#FF4F00" opacity="0.9" />
                                 <circle cx="12" cy="15" r="5" fill="#9ACD32" opacity="0.9" />
@@ -521,36 +523,36 @@
                         <span>(не в мессенджеры):</span>
                     </p>
                     <p>
-                        <a href="https://www.avito.ru/brands/i202143646?src=sharing" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-emerald-400 break-all transition underline">
+                        <a href="https://www.avito.ru/brands/i202143646?src=sharing" target="_blank" rel="noopener noreferrer" class="text-[11px] text-slate-400 hover:text-emerald-400 break-all transition underline">
                             https://www.avito.ru/brands/i202143646?src=sharing
                         </a>
                     </p>
                 </div>
             </div>
             <div>
-                <h3 class="text-white font-semibold text-lg mb-4">Правила заказа</h3>
-                <p class="text-sm leading-relaxed mb-3">Выберите желаемые позиции в каталоге, добавьте их в корзину, нажмите кнопку отправки заказа через Авито. Список автоматически скопируется в буфер обмена — вам останется лишь отправить его нам в чате Авито для подтверждения наличия.</p>
+                <h3 class="text-white font-semibold text-base mb-3">Правила заказа</h3>
+                <p class="text-xs leading-relaxed">Выберите желаемые позиции в каталоге, добавьте их в корзину, нажмите кнопку отправки заказа через Авито. Список автоматически скопируется в буфер обмена — вам останется лишь отправить его нам в чате Авито для подтверждения наличия.</p>
             </div>
         </div>
         
         <!-- Нижняя строка подвала -->
-        <div class="max-w-7xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs">
-            <div class="flex items-center gap-4">
+        <div class="max-w-7xl mx-auto px-4 mt-6 pt-6 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left text-[11px]">
+            <div class="flex items-center gap-3">
                 <span>© 2026 Саженцы плодовых культур. Все права защищены.</span>
                 <!-- Мини-версия изображения -->
-                <a href="images.jfif" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-3 py-2 rounded-full border border-slate-800 hover:border-emerald-700 focus:outline-none" title="Открыть изображение в полном размере">
-                    <img src="images.jfif" alt="Миниатюра" class="w-8 h-8 rounded-full object-cover ring-2 ring-slate-700 group-hover:ring-emerald-600 transition shrink-0">
-                    <span class="text-[11px]">Превью</span>
+                <a href="images.jfif" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-2.5 py-1.5 rounded-full border border-slate-800 hover:border-emerald-700 focus:outline-none" title="Открыть изображение в полном размере">
+                    <img src="images.jfif" alt="Миниатюра" class="w-6 h-6 rounded-full object-cover ring-2 ring-slate-700 group-hover:ring-emerald-600 transition shrink-0">
+                    <span class="text-[10px]">Превью</span>
                 </a>
             </div>
             
             <!-- Интерактивная ссылка на разработчика со всплывающей подсказкой (работает при наведении и при клике/фокусе) -->
-            <a href="https://t.me/Maks_studio_ai" target="_blank" rel="noopener noreferrer" class="relative group inline-flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-3.5 py-2 rounded-full border border-slate-800 hover:border-slate-700 focus:outline-none" title="Для заказа похожего или аналогичного сайта пишите на этот аккаунт">
+            <a href="https://t.me/Maks_studio_ai" target="_blank" rel="noopener noreferrer" class="relative group inline-flex items-center gap-1.5 text-slate-400 hover:text-emerald-400 transition bg-slate-800/40 hover:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-800 hover:border-emerald-700 focus:outline-none" title="Для заказа похожего или аналогичного сайта пишите на этот аккаунт">
                 <!-- Значок Telegram -->
-                <svg class="w-4 h-4 text-[#229ED9]" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="w-3.5 h-3.5 text-[#229ED9]" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.89 1.2-5.33 3.52-.5.35-.96.52-1.37.51-.45-.01-1.32-.26-1.97-.47-.79-.26-1.42-.4-1.37-.85.03-.23.35-.47.96-.72 3.76-1.63 6.27-2.71 7.53-3.23 3.58-1.48 4.32-1.74 4.81-1.75.11 0 .35.03.5.16.13.11.17.26.19.37z"/>
                 </svg>
-                <span>Разработчик: Maks_studio_ai</span>
+                <span class="text-[11px]">Разработчик: Maks_studio_ai</span>
                 
                 <!-- Кастомная плавная всплывающая подсказка (показывается и при наведении, и при клике/тапе) -->
                 <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 bg-slate-800 text-slate-200 text-xs py-2 px-3 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus:opacity-100 group-focus:visible active:opacity-100 active:visible transition-all duration-300 pointer-events-none text-center border border-slate-700 leading-normal z-50">
@@ -703,7 +705,6 @@
         // Загрузка данных из Google Таблицы
         async function loadProductsFromSheet() {
             const grid = document.getElementById('productGrid');
-            console.log('🔄 Начинаем загрузку данных...');
             
             // Показываем skeleton loading (6 карточек-заглушек)
             grid.innerHTML = Array(6).fill(0).map(() => `
@@ -999,17 +1000,9 @@
                 // Навигация слайдера (если элементов в сумме больше одного)
                 if (currentModalMedia.length > 1) {
                     controls.classList.remove('hidden');
-                    currentModalMedia.forEach((mediaItem, idx) => {
+                    currentModalMedia.forEach((_, idx) => {
                         const dot = document.createElement('button');
-                        
-                        // Если точка ведет на видео, сделаем её визуально отличной (с маленькой иконкой воспроизведения)
-                        if (mediaItem.type === 'video') {
-                            dot.className = `w-3 h-3 rounded-full flex items-center justify-center text-[8px] transition ${idx === activeModalMediaIndex ? 'bg-emerald-800 text-white w-5' : 'bg-slate-300 hover:bg-slate-400 text-slate-600'}`;
-                            dot.innerHTML = "▶";
-                        } else {
-                            dot.className = `w-2.5 h-2.5 rounded-full transition ${idx === activeModalMediaIndex ? 'bg-emerald-800 w-5' : 'bg-slate-300 hover:bg-slate-400'}`;
-                        }
-                        
+                        dot.className = `w-2 h-2 rounded-full transition ${idx === activeModalMediaIndex ? 'bg-emerald-700 w-4' : 'bg-slate-300'}`;
                         dot.onclick = (e) => {
                             e.stopPropagation();
                             activeModalMediaIndex = idx;
@@ -1018,64 +1011,47 @@
                         controls.appendChild(dot);
                     });
                 }
-            } else {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center text-emerald-600/60 p-4">
-                        <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800/50">Фото ожидается</span>
-                    </div>
-                `;
             }
         }
 
-        // Открытие Лайтбокса при клике на картинку в карточке детального просмотра
+        // Открытие лайтбокса из модалки товара
         function openLightboxFromModal() {
-            if (currentModalMedia && currentModalMedia.length > 0) {
-                const item = currentModalMedia[activeModalMediaIndex];
-                if (item.type === 'image') {
-                    openLightbox(item.url);
-                }
-            }
-        }
-
-        function openLightbox(src) {
+            if (currentModalMedia.length === 0) return;
+            const item = currentModalMedia[activeModalMediaIndex];
+            if (item.type !== 'image') return;
+            
             const lightbox = document.getElementById('lightboxModal');
-            const img = document.getElementById('lightboxImage');
-            img.src = src;
-            
-            // Начинаем показ со сжатой картинки (вписанной в экран)
-            isLightboxZoomed = false;
-            img.className = "max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300";
-            
+            const lightboxImg = document.getElementById('lightboxImage');
+            lightboxImg.src = item.url;
             lightbox.classList.remove('hidden');
+            isLightboxZoomed = false;
         }
 
-        // Переключение зума в Лайтбоксе (клик по увеличенной картинке)
-        function toggleLightboxZoom(event) {
-            event.stopPropagation(); // Не закрываем лайтбокс при клике на саму картинку
-            const img = document.getElementById('lightboxImage');
-            isLightboxZoomed = !isLightboxZoomed;
-            
-            if (isLightboxZoomed) {
-                // Переключаем на оригинальный (максимальный/физический) размер картинки.
-                img.className = "max-w-none max-h-none select-none cursor-zoom-out";
-            } else {
-                // Возвращаем вписывание в экран
-                img.className = "max-w-full max-h-[90vh] object-contain select-none cursor-zoom-in transition-all duration-300";
-            }
-        }
-
+        // Закрытие лайтбокса
         function closeLightbox() {
             document.getElementById('lightboxModal').classList.add('hidden');
         }
 
+        // Переключение зума в лайтбоксе
+        function toggleLightboxZoom(event) {
+            event.stopPropagation();
+            const img = document.getElementById('lightboxImage');
+            isLightboxZoomed = !isLightboxZoomed;
+            if (isLightboxZoomed) {
+                img.style.transform = 'scale(2)';
+                img.style.cursor = 'zoom-out';
+            } else {
+                img.style.transform = 'scale(1)';
+                img.style.cursor = 'zoom-in';
+            }
+        }
+
+        // Закрытие модалки товара
         function closeProductModal() {
             document.getElementById('productModal').classList.add('hidden');
         }
 
-        // Фильтрация
+        // Фильтрация по категории
         function filterCategory(category) {
             currentCategory = category;
             renderCategoryFilters();
