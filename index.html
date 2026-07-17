@@ -211,6 +211,89 @@
             from { opacity: 0; transform: scale(0.95) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
+        
+        /* Тёмная тема */
+        .dark {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+        .dark body,
+        .dark .bg-slate-50,
+        .dark .bg-white,
+        .dark .bg-slate-50\/50,
+        .dark .bg-emerald-50\/50 {
+            background-color: var(--bg-main) !important;
+        }
+        .dark .bg-white {
+            background-color: var(--bg-card) !important;
+        }
+        .dark .text-slate-800,
+        .dark .text-slate-900,
+        .dark .text-slate-600 {
+            color: var(--text-primary) !important;
+        }
+        .dark .text-slate-400,
+        .dark .text-slate-500 {
+            color: var(--text-secondary) !important;
+        }
+        .dark .border-slate-100,
+        .dark .border-slate-200 {
+            border-color: var(--border-color) !important;
+        }
+        .dark .bg-slate-100 {
+            background-color: #334155 !important;
+        }
+        
+        /* Переключатель темы */
+        .theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 999px;
+            padding: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .theme-toggle .dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+        .theme-toggle .dot.active {
+            background: #047857;
+            color: white;
+        }
+        .theme-toggle .dot:not(.active) {
+            color: #94a3b8;
+        }
+        
+        /* Анимация счётчиков */
+        .stat-number {
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .stat-number.animated {
+            animation: countPop 0.4s ease-out;
+        }
+        @keyframes countPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
@@ -249,6 +332,12 @@
                 <div class="relative flex-grow sm:flex-grow-0">
                     <input type="text" id="searchInput" placeholder="Поиск сорта..." class="w-full sm:w-64 px-4 py-2 pr-10 rounded-full bg-emerald-900/50 border border-emerald-700 text-white placeholder-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm">
                     <svg class="w-5 h-5 absolute right-3 top-2.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                
+                <!-- Переключатель тёмной темы -->
+                <div class="theme-toggle" onclick="toggleTheme()" title="Переключить тему" role="button" tabindex="0" aria-label="Переключить тему">
+                    <span class="dot active" id="themeLight">☀️</span>
+                    <span class="dot" id="themeDark">🌙</span>
                 </div>
                 
                 <button onclick="toggleCartModal()" class="relative bg-emerald-600 hover:bg-emerald-500 transition px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium shrink-0" title="Открыть корзину">
@@ -339,19 +428,19 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">500+</div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2"><span class="stat-number">500+</span></div>
                     <div class="text-sm text-slate-600">Довольных клиентов</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">1000+</div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2"><span class="stat-number">1000+</span></div>
                     <div class="text-sm text-slate-600">Саженцев продано</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">4.9</div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2"><span class="stat-number">4.9</span></div>
                     <div class="text-sm text-slate-600">Средняя оценка</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2">5 лет</div>
+                    <div class="text-3xl md:text-4xl font-bold text-emerald-800 mb-2"><span class="stat-number">5 лет</span></div>
                     <div class="text-sm text-slate-600">На рынке</div>
                 </div>
             </div>
@@ -1158,6 +1247,58 @@
             });
             
             renderProducts();
+        }
+
+        // Тёмная тема
+        function toggleTheme() {
+            const html = document.documentElement;
+            const lightDot = document.getElementById('themeLight');
+            const darkDot = document.getElementById('themeDark');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                lightDot.classList.add('active');
+                darkDot.classList.remove('active');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                lightDot.classList.remove('active');
+                darkDot.classList.add('active');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Восстанавливаем тему из localStorage
+        try {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeDark').classList.add('active');
+                document.getElementById('themeLight').classList.remove('active');
+            }
+        } catch(e) {}
+        
+        // Анимация счётчиков при скролле
+        function animateCounters() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                stat.classList.add('animated');
+                setTimeout(() => stat.classList.remove('animated'), 500);
+            });
+        }
+        
+        // Наблюдатель для анимации счётчиков
+        const statsSection = document.querySelector('.bg-emerald-50\\/50');
+        if (statsSection) {
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            statsObserver.observe(statsSection);
         }
 
         // Intersection Observer для fade-in анимации карточек при скролле
