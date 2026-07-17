@@ -1077,16 +1077,7 @@
         // Фильтрация
         function filterCategory(category) {
             currentCategory = category;
-            
-            const buttons = document.querySelectorAll('#categoryFilters button');
-            buttons.forEach(btn => {
-                if (btn.innerText.includes(category) || (category === 'Все' && btn.innerText.includes('Все'))) {
-                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-emerald-800 text-white shadow-sm";
-                } else {
-                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
-                }
-            });
-
+            renderCategoryFilters();
             renderProducts();
         }
 
@@ -1254,16 +1245,7 @@
             searchQuery = '';
             document.getElementById('searchInput').value = '';
             
-            // Сброс активного класса у кнопок категорий
-            const buttons = document.querySelectorAll('#categoryFilters button');
-            buttons.forEach(btn => {
-                if (btn.innerText.includes('Все')) {
-                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-emerald-800 text-white shadow-sm";
-                } else {
-                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
-                }
-            });
-            
+            renderCategoryFilters();
             renderProducts();
         }
 
