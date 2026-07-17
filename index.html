@@ -27,9 +27,14 @@
     <!-- Favicon (emoji fallback) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
     
-    <!-- PWA Manifest (для добавления на домашний экран) -->
+    <!-- PWA Manifest + Service Worker (для офлайн-режима) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#047857">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
     
     <!-- JSON-LD Structured Data (Organization + Product + Reviews) -->
     <script type="application/ld+json">
