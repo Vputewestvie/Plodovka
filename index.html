@@ -351,14 +351,10 @@
 
     <!-- Главная часть: Фильтры и Список товаров -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-        <!-- Фильтры по категориям -->
+        <!-- Фильтры по категориям (генерируются автоматически из данных таблицы) -->
         <div class="mb-8 overflow-x-auto pb-2 scrollbar-none">
             <div class="flex gap-2 min-w-max" id="categoryFilters">
-                <button onclick="filterCategory('Все')" class="category-btn active px-5 py-2.5 rounded-full text-sm font-medium transition bg-emerald-800 text-white shadow-sm">Все культуры</button>
-                <button onclick="filterCategory('Жимолость')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Жимолость</button>
-                <button onclick="filterCategory('Смородина')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Смородина</button>
-                <button onclick="filterCategory('Крыжовник')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Крыжовник</button>
-                <button onclick="filterCategory('Малина')" class="category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">Малина</button>
+                <!-- Кнопки создаются динамически в JS -->
             </div>
         </div>
 
@@ -763,6 +759,7 @@
                             };
                         });
 
+                    renderCategoryFilters();
                     renderProducts();
                     updateCartUI();
                 },
@@ -774,6 +771,27 @@
                             <p class="text-sm text-slate-500 mt-2">Пожалуйста, проверьте настройки доступа в Google Таблице.</p>
                         </div>`;
                 }
+            });
+        }
+
+        // Динамическое создание кнопок фильтров из данных таблицы
+        function renderCategoryFilters() {
+            const container = document.getElementById('categoryFilters');
+            container.innerHTML = '';
+            
+            // Собираем уникальные группы
+            const groups = ['Все', ...new Set(productsData.map(p => p.group).filter(Boolean))];
+            
+            groups.forEach(group => {
+                const btn = document.createElement('button');
+                btn.onclick = () => filterCategory(group);
+                if (group === currentCategory) {
+                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-emerald-800 text-white shadow-sm";
+                } else {
+                    btn.className = "category-btn px-5 py-2.5 rounded-full text-sm font-medium transition bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
+                }
+                btn.innerText = group;
+                container.appendChild(btn);
             });
         }
 
