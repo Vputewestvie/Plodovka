@@ -294,6 +294,464 @@
             50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
+
+        /* Улучшенные hover-эффекты для кнопок категорий */
+        .category-btn {
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .category-btn:hover::before {
+            width: 200%;
+            height: 200%;
+        }
+        .category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .category-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Улучшенные hover-эффекты для карточек товаров */
+        .product-card {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 0 0 2px #047857;
+        }
+        .product-card:hover::after {
+            opacity: 0.3;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+        .product-card .product-image img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+        .product-card .add-to-cart-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover .add-to-cart-btn {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 4px 12px rgba(4, 120, 87, 0.4);
+        }
+        .product-card .add-to-cart-btn:active {
+            transform: scale(0.95) rotate(90deg);
+        }
+
+        /* Улучшенные hover-эффекты для шапки */
+        .header-phone {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .header-phone::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fbbf24;
+            transition: width 0.3s ease;
+        }
+        .header-phone:hover::after {
+            width: 100%;
+        }
+        .header-phone:hover {
+            transform: translateX(4px);
+        }
+
+        .cart-button {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(4, 120, 87, 0.4);
+        }
+        .cart-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Пульсация бейджа корзины */
+        @keyframes cartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .cart-count-pulse {
+            animation: cartPulse 0.4s ease-in-out;
+        }
+
+        /* Улучшенный переключатель темы */
+        .theme-toggle {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+        .theme-toggle .dot {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .theme-toggle .dot.active {
+            animation: dotPop 0.3s ease-out;
+        }
+        @keyframes dotPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Улучшенные hover-эффекты для FAQ */
+        details {
+            transition: all 0.3s ease;
+        }
+        details:hover {
+            transform: translateX(4px);
+            border-color: #047857;
+        }
+        details summary {
+            position: relative;
+        }
+        details summary::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #047857;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        details:hover summary::before {
+            transform: scaleY(1);
+        }
+
+        /* Улучшенные hover-эффекты для блока преимуществ */
+        .advantage-card {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .advantage-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        .advantage-card:hover::before {
+            opacity: 1;
+        }
+        .advantage-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -12px rgba(4, 120, 87, 0.3);
+        }
+        .advantage-card > * {
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+        .advantage-card:hover h3,
+        .advantage-card:hover p {
+            color: white;
+        }
+        .advantage-card:hover .advantage-icon {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1) rotate(5deg);
+        }
+        .advantage-icon {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Улучшенные hover-эффекты для футера */
+        .footer-link {
+            position: relative;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #047857;
+            transition: width 0.3s ease;
+        }
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        .footer-link:hover {
+            color: #34d399;
+        }
+
+        /* Улучшенные hover-эффекты для статистики */
+        .stat-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 1rem;
+            background: radial-gradient(circle, rgba(4, 120, 87, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .stat-item:hover::before {
+            opacity: 1;
+        }
+        .stat-item:hover {
+            transform: translateY(-4px);
+        }
+        .stat-item:hover .stat-number {
+            animation: countPop 0.4s ease-out;
+        }
+
+        /* Улучшенный hover-эффект для кнопки "Наверх" */
+        .scroll-to-top {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .scroll-to-top:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .scroll-to-top:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Улучшенный hover-эффект для кнопки "Сбросить фильтры" */
+        .reset-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .reset-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .reset-btn:hover::before {
+            width: 300%;
+            height: 300%;
+        }
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(4, 120, 87, 0.3);
+        }
+        .reset-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Улучшенный hover-эффект для кнопки "Оформить заказ" */
+        .order-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .order-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .order-btn:hover::before {
+            left: 100%;
+        }
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 170, 255, 0.4);
+        }
+        .order-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Улучшенный hover-эффект для кнопки "Добавить в корзину" в модалке */
+        .modal-add-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-add-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .modal-add-btn:hover::before {
+            width: 400%;
+            height: 400%;
+        }
+        .modal-add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(4, 120, 87, 0.4);
+        }
+        .modal-add-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Улучшенный hover-эффект для поиска */
+        .search-input-wrapper {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .search-input-wrapper:hover {
+            transform: scale(1.02);
+        }
+        .search-input-wrapper:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+        }
+
+        /* Улучшенный hover-эффект для ссылки разработчика */
+        .developer-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .developer-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+        }
+        .developer-link:hover svg {
+            transform: scale(1.2);
+        }
+        .developer-link svg {
+            transition: transform 0.3s ease;
+        }
+
+        /* Ripple эффект для кнопок */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .ripple.ripple-active::after {
+            animation: rippleEffect 0.6s ease-out;
+        }
+        @keyframes rippleEffect {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.5;
+            }
+            100% {
+                width: 400px;
+                height: 400px;
+                opacity: 0;
+            }
+        }
+
+        /* Улучшенные active states для всех интерактивных элементов */
+        button:active,
+        a:active,
+        .category-btn:active,
+        .product-card:active,
+        .cart-button:active,
+        .theme-toggle:active,
+        .scroll-to-top:active,
+        .reset-btn:active,
+        .order-btn:active,
+        .modal-add-btn:active,
+        .add-to-cart-btn:active {
+            transform: scale(0.97);
+            transition: transform 0.1s ease;
+        }
+
+        /* Анимация загрузки изображений */
+        @keyframes imageFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .product-image img {
+            animation: imageFadeIn 0.4s ease-out;
+        }
+
+        /* Плавное появление карточек товаров */
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .product-card {
+            animation: cardFadeIn 0.5s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
@@ -1306,6 +1764,92 @@
             } else {
                 btn.classList.remove('visible');
             }
+        });
+
+        // Ripple эффект для кнопок
+        document.addEventListener('click', function(e) {
+            const button = e.target.closest('button, .category-btn, .cart-button, .theme-toggle, .scroll-to-top, .reset-btn, .order-btn, .modal-add-btn, .add-to-cart-btn, .ripple');
+            if (!button) return;
+
+            // Не применяем ripple для маленьких кнопок
+            if (button.classList.contains('add-to-cart-btn') && button.offsetWidth < 40) {
+                return;
+            }
+
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const ripple = document.createElement('span');
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.4);
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                animation: rippleButton 0.6s ease-out;
+            `;
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = '0px';
+            ripple.style.height = '0px';
+
+            button.style.position = button.style.position || 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Добавляем CSS для ripple анимации динамически
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes rippleButton {
+                0% {
+                    width: 0px;
+                    height: 0px;
+                    opacity: 0.5;
+                }
+                100% {
+                    width: 400px;
+                    height: 400px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+
+        // Улучшенная анимация загрузки изображений
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.style.opacity = '0';
+                    img.style.transform = 'scale(0.95)';
+                    
+                    if (img.complete) {
+                        img.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                        img.style.opacity = '1';
+                        img.style.transform = 'scale(1)';
+                    } else {
+                        img.onload = () => {
+                            img.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                            img.style.opacity = '1';
+                            img.style.transform = 'scale(1)';
+                        };
+                    }
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Наблюдаем за всеми изображениями товаров
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.product-image img').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }, 100);
         });
 
         // Инициализация при загрузке
