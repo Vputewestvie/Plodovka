@@ -703,6 +703,7 @@
         // Загрузка данных из Google Таблицы
         async function loadProductsFromSheet() {
             const grid = document.getElementById('productGrid');
+            console.log('🔄 Начинаем загрузку данных...');
             
             // Показываем skeleton loading (6 карточек-заглушек)
             grid.innerHTML = Array(6).fill(0).map(() => `
