@@ -27,6 +27,10 @@
     <!-- Favicon (emoji fallback) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
     
+    <!-- PWA Manifest (для добавления на домашний экран) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#047857">
+    
     <!-- JSON-LD Structured Data (Organization + Product + Reviews) -->
     <script type="application/ld+json">
     {
@@ -181,6 +185,26 @@
             background: #065f46;
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Анимация бейджа корзины при добавлении товара */
+        @keyframes cartBounce {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.4); }
+            60% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        .cart-bounce {
+            animation: cartBounce 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Плавное появление модалок */
+        .modal-enter {
+            animation: modalFadeIn 0.25s ease-out forwards;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
     </style>
 </head>
@@ -815,8 +839,10 @@
                 addToCart(p.id);
             };
 
-            // Показываем окно
-            document.getElementById('productModal').classList.remove('hidden');
+            // Показываем окно с анимацией
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('hidden');
+            modal.querySelector('.bg-white').classList.add('modal-enter');
         }
 
         // Рендеринг медиафайла (картинка или видео) в детальной карточке
@@ -977,6 +1003,12 @@
                 };
             }
             updateCartUI();
+            
+            // Анимация бейджа корзины
+            const cartBadge = document.getElementById('cartCount');
+            cartBadge.classList.remove('cart-bounce');
+            void cartBadge.offsetWidth; // trigger reflow
+            cartBadge.classList.add('cart-bounce');
             
             // Всплывающее уведомление для подтверждения добавления
             const { title } = parseName(product.fullName);
